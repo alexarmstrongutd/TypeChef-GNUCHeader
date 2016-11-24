@@ -1,0 +1,11 @@
+--platfromHeader TypeChef-GNUCHeader/platform.h
+-I TypeChef-GNUCHeader/usr_include/
+-I
+TypeChef-GNUCHeader/x86_64-linux-gnu/4.8/include
+-I
+TypeChef-GNUCHeader/x86_64-linux-gnu/4.8/include-fixed
+-I
+TypeChef-GNUCHeader/x86_64-linux-gnu
+--openFeat
+TypeChef-GNUCHeader/openfeatures.txt
+--bdd
