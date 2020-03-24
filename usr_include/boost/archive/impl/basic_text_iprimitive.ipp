@@ -39,13 +39,13 @@ namespace {
 
     template<>
     bool is_whitespace(char t){
-        return 0 != std::isspace(t);
+        return std::isspace(t);
     }
 
     #ifndef BOOST_NO_CWCHAR
     template<>
     bool is_whitespace(wchar_t t){
-        return 0 != std::iswspace(t);
+        return std::iswspace(t);
     }
     #endif
 }
@@ -63,14 +63,14 @@ basic_text_iprimitive<IStream>::load_binary(
     if(0 == count)
         return;
         
-    BOOST_ASSERT(
+    assert(
         static_cast<std::size_t>((std::numeric_limits<std::streamsize>::max)())
         > (count + sizeof(CharType) - 1)/sizeof(CharType)
     );
         
     if(is.fail())
         boost::serialization::throw_exception(
-            archive_exception(archive_exception::input_stream_error)
+            archive_exception(archive_exception::stream_error)
         );
     // convert from base64 to binary
     typedef BOOST_DEDUCED_TYPENAME
@@ -86,31 +86,33 @@ basic_text_iprimitive<IStream>::load_binary(
             ,CharType
         > 
         binary;
-        
-    binary i = binary(
+
+    binary ti_begin = binary(
         BOOST_MAKE_PFTO_WRAPPER(
             iterators::istream_iterator<CharType>(is)
         )
     );
-
+                
     char * caddr = static_cast<char *>(address);
     
     // take care that we don't increment anymore than necessary
-    while(count-- > 0){
-        *caddr++ = static_cast<char>(*i++);
+    while(--count > 0){
+        *caddr++ = static_cast<char>(*ti_begin);
+        ++ti_begin;
     }
-
-    // skip over any excess input
+    *caddr++ = static_cast<char>(*ti_begin);
+    
+    iterators::istream_iterator<CharType> i;
     for(;;){
-        BOOST_DEDUCED_TYPENAME IStream::int_type r;
-        r = is.get();
+        CharType c;
+        c = is.get();
         if(is.eof())
             break;
-        if(is_whitespace(static_cast<CharType>(r)))
+        if(is_whitespace(c))
             break;
     }
 }
-    
+
 template<class IStream>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 basic_text_iprimitive<IStream>::basic_text_iprimitive(
@@ -122,7 +124,7 @@ basic_text_iprimitive<IStream>::basic_text_iprimitive(
     flags_saver(is_),
     precision_saver(is_),
     archive_locale(NULL),
-    locale_saver(* is_.rdbuf())
+    locale_saver(is_)
 {
     if(! no_codecvt){
         archive_locale.reset(

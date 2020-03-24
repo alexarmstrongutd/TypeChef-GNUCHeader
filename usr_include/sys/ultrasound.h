@@ -1,1 +1,1 @@
-../x86_64-linux-gnu/sys/ultrasound.h
+#include <linux/ultrasound.h>

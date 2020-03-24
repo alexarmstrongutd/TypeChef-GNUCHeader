@@ -22,7 +22,6 @@
 #include <boost/iostreams/detail/streambuf/indirect_streambuf.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/throw_exception.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
 // Must come last.
@@ -100,9 +99,7 @@ private:
     void open_impl(const T& t BOOST_IOSTREAMS_PUSH_PARAMS())
         {   // Used for forwarding.
             if (this->is_open())
-                boost::throw_exception(
-                    BOOST_IOSTREAMS_FAILURE("already open")
-                );
+                BOOST_IOSTREAMS_FAILURE("already open");
             base_type::open(t BOOST_IOSTREAMS_PUSH_ARGS());
         }
 };

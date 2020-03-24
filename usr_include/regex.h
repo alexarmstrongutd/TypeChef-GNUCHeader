@@ -1,6 +1,7 @@
 /* Definitions for data structures and routines for the regular
    expression library.
-   Copyright (C) 1985, 1989-2014 Free Software Foundation, Inc.
+   Copyright (C) 1985,1989-93,1995-98,2000,2001,2002,2003,2005,2006,2008
+   Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -14,14 +15,14 @@
    Lesser General Public License for more details.
 
    You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, see
-   <http://www.gnu.org/licenses/>.  */
+   License along with the GNU C Library; if not, write to the Free
+   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   02111-1307 USA.  */
 
 #ifndef _REGEX_H
 #define _REGEX_H 1
 
 #include <sys/types.h>
-#include <gnu/option-groups.h>
 
 /* Allow the use in C++ code.  */
 #ifdef __cplusplus
@@ -61,10 +62,10 @@ typedef unsigned long int reg_syntax_t;
 /* If this bit is set, then ^ and $ are always anchors (outside bracket
      expressions, of course).
    If this bit is not set, then it depends:
-	^  is an anchor if it is at the beginning of a regular
-	   expression or after an open-group or an alternation operator;
-	$  is an anchor if it is at the end of a regular expression, or
-	   before a close-group or an alternation operator.
+        ^  is an anchor if it is at the beginning of a regular
+           expression or after an open-group or an alternation operator;
+        $  is an anchor if it is at the end of a regular expression, or
+           before a close-group or an alternation operator.
 
    This bit could be (re)combined with RE_CONTEXT_INDEP_OPS, because
    POSIX draft 11.2 says that * etc. in leading positions is undefined.
@@ -157,8 +158,6 @@ typedef unsigned long int reg_syntax_t;
    treated as 'a\{1'.  */
 # define RE_INVALID_INTERVAL_ORD (RE_DEBUG << 1)
 
-/* EGLIBC: Old regex implementation does not support these.  */
-# ifdef __OPTION_POSIX_REGEXP_GLIBC
 /* If this bit is set, then ignore case when matching.
    If not set, then case is significant.  */
 # define RE_ICASE (RE_INVALID_INTERVAL_ORD << 1)
@@ -175,7 +174,6 @@ typedef unsigned long int reg_syntax_t;
 /* If this bit is set, then no_sub will be set to 1 during
    re_compile_pattern.  */
 # define RE_NO_SUB (RE_CONTEXT_INVALID_DUP << 1)
-# endif /* __OPTION_POSIX_REGEXP_GLIBC */
 #endif
 
 /* This global variable defines the particular regexp syntax to use (for
@@ -183,7 +181,7 @@ typedef unsigned long int reg_syntax_t;
    stored in the pattern buffer, so changing this does not affect
    already-compiled regexps.  */
 extern reg_syntax_t re_syntax_options;
-
+
 #ifdef __USE_GNU
 /* Define combinations of the above bits for the standard possibilities.
    (The [[[ comments delimit what gets put into the Texinfo file, so
@@ -196,19 +194,16 @@ extern reg_syntax_t re_syntax_options;
    | RE_NO_BK_PARENS              | RE_NO_BK_REFS			\
    | RE_NO_BK_VBAR                | RE_NO_EMPTY_RANGES			\
    | RE_DOT_NEWLINE		  | RE_CONTEXT_INDEP_ANCHORS		\
-   | RE_CHAR_CLASSES							\
    | RE_UNMATCHED_RIGHT_PAREN_ORD | RE_NO_GNU_OPS)
 
 #define RE_SYNTAX_GNU_AWK						\
-  ((RE_SYNTAX_POSIX_EXTENDED | RE_BACKSLASH_ESCAPE_IN_LISTS		\
-    | RE_INVALID_INTERVAL_ORD)						\
-   & ~(RE_DOT_NOT_NULL | RE_CONTEXT_INDEP_OPS				\
-      | RE_CONTEXT_INVALID_OPS ))
+  ((RE_SYNTAX_POSIX_EXTENDED | RE_BACKSLASH_ESCAPE_IN_LISTS | RE_DEBUG)	\
+   & ~(RE_DOT_NOT_NULL | RE_INTERVALS | RE_CONTEXT_INDEP_OPS		\
+       | RE_CONTEXT_INVALID_OPS ))
 
 #define RE_SYNTAX_POSIX_AWK						\
   (RE_SYNTAX_POSIX_EXTENDED | RE_BACKSLASH_ESCAPE_IN_LISTS		\
-   | RE_INTERVALS	    | RE_NO_GNU_OPS				\
-   | RE_INVALID_INTERVAL_ORD)
+   | RE_INTERVALS	    | RE_NO_GNU_OPS)
 
 #define RE_SYNTAX_GREP							\
   (RE_BK_PLUS_QM              | RE_CHAR_CLASSES				\
@@ -235,13 +230,8 @@ extern reg_syntax_t re_syntax_options;
   (RE_CHAR_CLASSES | RE_DOT_NEWLINE      | RE_DOT_NOT_NULL		\
    | RE_INTERVALS  | RE_NO_EMPTY_RANGES)
 
-#ifdef __OPTION_POSIX_REGEXP_GLIBC
 #define RE_SYNTAX_POSIX_BASIC						\
   (_RE_SYNTAX_POSIX_COMMON | RE_BK_PLUS_QM | RE_CONTEXT_INVALID_DUP)
-#else
-#define RE_SYNTAX_POSIX_BASIC						\
-  (_RE_SYNTAX_POSIX_COMMON | RE_BK_PLUS_QM)
-#endif
 
 /* Differs from ..._POSIX_BASIC only in that RE_BK_PLUS_QM becomes
    RE_LIMITED_OPS, i.e., \? \+ \| are not recognized.  Actually, this
@@ -263,7 +253,7 @@ extern reg_syntax_t re_syntax_options;
    | RE_NO_BK_PARENS        | RE_NO_BK_REFS				\
    | RE_NO_BK_VBAR	    | RE_UNMATCHED_RIGHT_PAREN_ORD)
 /* [[[end syntaxes]]] */
-
+
 /* Maximum number of duplicates an interval can allow.  Some systems
    (erroneously) define this in other header files, but we want our
    value, so remove any previous define.  */
@@ -307,11 +297,9 @@ extern reg_syntax_t re_syntax_options;
 /* Like REG_NOTBOL, except for the end-of-line.  */
 #define REG_NOTEOL (1 << 1)
 
-#ifdef __OPTION_POSIX_REGEXP_GLIBC
 /* Use PMATCH[0] to delimit the start and end of the search in the
    buffer.  */
 #define REG_STARTEND (1 << 2)
-#endif
 
 
 /* If any error codes are removed, changed, or added, update the
@@ -345,12 +333,12 @@ typedef enum
   REG_ESIZE,		/* Compiled pattern bigger than 2^16 bytes.  */
   REG_ERPAREN		/* Unmatched ) or \); not returned from regcomp.  */
 } reg_errcode_t;
-
+
 /* This data structure represents a compiled pattern.  Before calling
    the pattern compiler, the fields `buffer', `allocated', `fastmap',
-   and `translate' can be set.  After the pattern has been compiled,
-   the fields `re_nsub', `not_bol' and `not_eol' are available.  All
-   other fields are private to the regex routines.  */
+   `translate', and `no_sub' can be set.  After the pattern has been
+   compiled, the `re_nsub' field is available.  All other fields are
+   private to the regex routines.  */
 
 #ifndef RE_TRANSLATE_TYPE
 # define __RE_TRANSLATE_TYPE unsigned char *
@@ -432,7 +420,7 @@ struct re_pattern_buffer
 };
 
 typedef struct re_pattern_buffer regex_t;
-
+
 /* Type for byte offsets within the string.  POSIX mandates this.  */
 typedef int regoff_t;
 
@@ -465,7 +453,7 @@ typedef struct
   regoff_t rm_so;  /* Byte offset from string's start to substring's start.  */
   regoff_t rm_eo;  /* Byte offset from string's start to substring's end.  */
 } regmatch_t;
-
+
 /* Declarations for routines.  */
 
 #ifdef __USE_GNU
@@ -475,12 +463,7 @@ extern reg_syntax_t re_set_syntax (reg_syntax_t __syntax);
 
 /* Compile the regular expression PATTERN, with length LENGTH
    and syntax given by the global `re_syntax_options', into the buffer
-   BUFFER.  Return NULL if successful, and an error string if not.
-
-   To free the allocated storage, you must call `regfree' on BUFFER.
-   Note that the translate table must either have been initialised by
-   `regcomp', with a malloc'ed value, or set to NULL before calling
-   `regfree'.  */
+   BUFFER.  Return NULL if successful, and an error string if not.  */
 extern const char *re_compile_pattern (const char *__pattern, size_t __length,
 				       struct re_pattern_buffer *__buffer);
 

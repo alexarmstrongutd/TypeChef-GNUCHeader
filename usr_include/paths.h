@@ -61,14 +61,14 @@
 #define	_PATH_SHELLS	"/etc/shells"
 #define	_PATH_TTY	"/dev/tty"
 #define	_PATH_UNIX	"/boot/vmlinux"
-#define	_PATH_UTMP	"/var/run/utmp"
-#define	_PATH_VI	"/usr/bin/vi"
-#define	_PATH_WTMP	"/var/log/wtmp"
+#define _PATH_UTMP	"/var/run/utmp"
+#define	_PATH_VI	"/bin/vi"
+#define _PATH_WTMP	"/var/log/wtmp"
 
 /* Provide trailing slash, since mostly used for building pathnames. */
 #define	_PATH_DEV	"/dev/"
 #define	_PATH_TMP	"/tmp/"
-#define	_PATH_VARDB	"/var/lib/misc/"
+#define	_PATH_VARDB	"/var/db/"
 #define	_PATH_VARRUN	"/var/run/"
 #define	_PATH_VARTMP	"/var/tmp/"
 

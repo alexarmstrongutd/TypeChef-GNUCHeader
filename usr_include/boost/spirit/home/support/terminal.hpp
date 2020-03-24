@@ -1,7 +1,5 @@
 /*=============================================================================
-    Copyright (c) 2001-2011 Joel de Guzman
-    Copyright (c) 2001-2011 Hartmut Kaiser
-    Copyright (c)      2011 Thomas Heller
+    Copyright (c) 2001-2009 Joel de Guzman
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -13,17 +11,13 @@
 #pragma once
 #endif
 
+#include <boost/proto/proto.hpp>
+#include <boost/fusion/include/unused.hpp>
+#include <boost/fusion/include/void.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
 #include <boost/spirit/include/phoenix_function.hpp>
-#include <boost/proto/proto.hpp>
-#include <boost/fusion/include/void.hpp>
 #include <boost/spirit/home/support/meta_compiler.hpp>
 #include <boost/spirit/home/support/detail/make_vector.hpp>
-#include <boost/spirit/home/support/unused.hpp>
-#include <boost/spirit/home/support/detail/is_spirit_tag.hpp>
-#include <boost/preprocessor/tuple/elem.hpp>
-
-#include <boost/spirit/home/support/terminal_expression.hpp>
 
 namespace boost { namespace spirit
 {
@@ -65,13 +59,6 @@ namespace boost { namespace spirit
     template <typename Domain, typename Terminal, int Arity, typename Enable = void>
     struct use_lazy_directive : mpl::false_ {};
 
-    template <typename Terminal>
-    struct terminal;
-
-    template <typename Domain, typename Terminal>
-    struct use_terminal<Domain, terminal<Terminal> >
-        : use_terminal<Domain, Terminal> {};
-
     template <typename Domain, typename Terminal, int Arity, typename Actor>
     struct use_terminal<Domain, lazy_terminal<Terminal, Actor, Arity> >
         : use_lazy_terminal<Domain, Terminal, Arity> {};
@@ -96,7 +83,11 @@ namespace boost { namespace spirit
             proto::terminal<
                 lazy_terminal<
                     typename F::terminal_type
-                  , typename phoenix::detail::expression::function_eval<F, A0>::type
+                  , phoenix::actor<
+                        typename phoenix::as_composite<
+                            phoenix::detail::function_eval<1>, F, A0
+                        >::type
+                    >
                   , 1 // arity
                 >
             >::type
@@ -108,7 +99,7 @@ namespace boost { namespace spirit
         {
             typedef typename result_type::proto_child0 child_type;
             return result_type::make(child_type(
-                phoenix::detail::expression::function_eval<F, A0>::make(f, _0)
+                phoenix::compose<phoenix::detail::function_eval<1> >(f, _0)
               , f.proto_base().child0
             ));
         }
@@ -121,7 +112,11 @@ namespace boost { namespace spirit
             proto::terminal<
                lazy_terminal<
                     typename F::terminal_type
-                  , typename phoenix::detail::expression::function_eval<F, A0, A1>::type
+                  , phoenix::actor<
+                        typename phoenix::as_composite<
+                            phoenix::detail::function_eval<2>, F, A0, A1
+                        >::type
+                    >
                   , 2 // arity
                 >
             >::type
@@ -133,7 +128,7 @@ namespace boost { namespace spirit
         {
             typedef typename result_type::proto_child0 child_type;
             return result_type::make(child_type(
-                phoenix::detail::expression::function_eval<F, A0, A1>::make(f, _0, _1)
+                phoenix::compose<phoenix::detail::function_eval<2> >(f, _0, _1)
               , f.proto_base().child0
             ));
         }
@@ -146,7 +141,11 @@ namespace boost { namespace spirit
             proto::terminal<
                lazy_terminal<
                     typename F::terminal_type
-                  , typename phoenix::detail::expression::function_eval<F, A0, A1, A2>::type
+                  , phoenix::actor<
+                        typename phoenix::as_composite<
+                            phoenix::detail::function_eval<3>, F, A0, A1, A2
+                        >::type
+                    >
                   , 3 // arity
                 >
             >::type
@@ -158,7 +157,7 @@ namespace boost { namespace spirit
         {
             typedef typename result_type::proto_child0 child_type;
             return result_type::make(child_type(
-                phoenix::detail::expression::function_eval<F, A0, A1, A2>::make(f, _0, _1, _2)
+                phoenix::compose<phoenix::detail::function_eval<3> >(f, _0, _1, _2)
               , f.proto_base().child0
             ));
         }
@@ -167,19 +166,14 @@ namespace boost { namespace spirit
     namespace detail
     {
         // Helper struct for SFINAE purposes
-        template <bool C> struct bool_;
-
+        template <bool C>
+        struct bool_;
         template <>
         struct bool_<true> : mpl::bool_<true>
-        { 
-            typedef bool_<true>* is_true; 
-        };
-
+          { typedef bool_<true>* is_true; };
         template <>
         struct bool_<false> : mpl::bool_<false>
-        { 
-            typedef bool_<false>* is_false; 
-        };
+          { typedef bool_<false>* is_false; };
 
         // Metafunction to detect if at least one arg is a Phoenix actor
         template <
@@ -189,10 +183,10 @@ namespace boost { namespace spirit
         >
         struct contains_actor
             : bool_<
-                  phoenix::is_actor<A0>::value
-               || phoenix::is_actor<A1>::value
-               || phoenix::is_actor<A2>::value
-              >
+                phoenix::is_actor<A0>::value
+             || phoenix::is_actor<A1>::value
+             || phoenix::is_actor<A2>::value
+            >
         {};
 
         // to_lazy_arg: convert a terminal arg type to the type make_lazy needs
@@ -203,11 +197,6 @@ namespace boost { namespace spirit
 
         template <typename A>
         struct to_lazy_arg<const A>
-          : to_lazy_arg<A>
-        {};
-        
-        template <typename A>
-        struct to_lazy_arg<A &>
           : to_lazy_arg<A>
         {};
 
@@ -228,11 +217,6 @@ namespace boost { namespace spirit
 
         template <typename A>
         struct to_nonlazy_arg<const A>
-          : to_nonlazy_arg<A>
-        {};
-
-        template <typename A>
-        struct to_nonlazy_arg<A &>
           : to_nonlazy_arg<A>
         {};
 
@@ -262,8 +246,7 @@ namespace boost { namespace spirit
         terminal() {}
 
         terminal(Terminal const& t)
-          : base_type(proto::terminal<Terminal>::type::make(t)) 
-        {}
+          : base_type(proto::terminal<Terminal>::type::make(t)) {}
 
         template <
             bool Lazy
@@ -323,40 +306,6 @@ namespace boost { namespace spirit
             type;
         };
 
-        template <typename This, typename A0>
-        struct result<This(A0)>
-        {
-            typedef typename
-                result_helper<
-                    detail::contains_actor<A0, unused_type, unused_type>::value
-                  , A0, unused_type, unused_type
-                >::type
-            type;
-        };
-
-        template <typename This, typename A0, typename A1>
-        struct result<This(A0, A1)>
-        {
-            typedef typename
-                result_helper<
-                    detail::contains_actor<A0, A1, unused_type>::value
-                  , A0, A1, unused_type
-                >::type
-            type;
-        };
-
-
-        template <typename This, typename A0, typename A1, typename A2>
-        struct result<This(A0, A1, A2)>
-        {
-            typedef typename
-                result_helper<
-                     detail::contains_actor<A0, A1, A2>::value
-                   , A0, A1, A2
-                 >::type
-                 type;
-        };
-
         // Note: in the following overloads, SFINAE cannot
         // be done on return type because of gcc bug #24915:
         //   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=24915
@@ -410,6 +359,7 @@ namespace boost { namespace spirit
 
         // Lazy overloads. Enabled when at
         // least one arg is a Phoenix actor.
+
         template <typename A0>
         typename result<A0>::type
         operator()(A0 const& _0
@@ -454,7 +404,7 @@ namespace boost { namespace spirit
     ///////////////////////////////////////////////////////////////////////////
     namespace result_of
     {
-        // Calculate the type of the compound terminal if generated by one of
+        // Calculate the type of the compound terminal if generated by one of 
         // the spirit::terminal::operator() overloads above
 
         // The terminal type itself is passed through without modification
@@ -490,13 +440,10 @@ namespace boost { namespace spirit
     // support for stateful tag types
     namespace tag
     {
-        template <
-            typename Data, typename Tag
+        template <typename Data, typename Tag
           , typename DataTag1 = unused_type, typename DataTag2 = unused_type>
-        struct stateful_tag
+        struct stateful_tag 
         {
-            BOOST_SPIRIT_IS_TAG()
-
             typedef Data data_type;
 
             stateful_tag() {}
@@ -510,18 +457,16 @@ namespace boost { namespace spirit
         };
     }
 
-    template <
-        typename Data, typename Tag
+    template <typename Data, typename Tag
       , typename DataTag1 = unused_type, typename DataTag2 = unused_type>
     struct stateful_tag_type
-      : spirit::terminal<tag::stateful_tag<Data, Tag, DataTag1, DataTag2> >
+      : spirit::terminal<tag::stateful_tag<Data, Tag, DataTag1, DataTag2> > 
     {
         typedef tag::stateful_tag<Data, Tag, DataTag1, DataTag2> tag_type;
 
         stateful_tag_type() {}
         stateful_tag_type(Data const& data)
-          : spirit::terminal<tag_type>(data) 
-        {}
+          : spirit::terminal<tag_type>(data) {}
 
     private:
         // silence MSVC warning C4512: assignment operator could not be generated
@@ -547,107 +492,42 @@ namespace boost { namespace spirit
 
 }}
 
-#ifdef BOOST_SPIRIT_USE_PHOENIX_V3
-namespace boost { namespace phoenix
-{
-    template <typename Tag>
-    struct is_custom_terminal<Tag, typename Tag::is_spirit_tag>
-      : mpl::true_
-    {};
-
-    template <typename Tag>
-    struct custom_terminal<Tag, typename Tag::is_spirit_tag>
-    {
-        typedef spirit::terminal<Tag> result_type;
-
-        template <typename Context>
-        result_type operator()(Tag const & t, Context const &)
-        {
-            return spirit::terminal<Tag>(t);
-        }
-    };
-}}
-#endif
-
 // Define a spirit terminal. This macro may be placed in any namespace.
 // Common placeholders are placed in the main boost::spirit namespace
 // (see common_terminals.hpp)
 
-#define BOOST_SPIRIT_TERMINAL_X(x, y) ((x, y)) BOOST_SPIRIT_TERMINAL_Y
-#define BOOST_SPIRIT_TERMINAL_Y(x, y) ((x, y)) BOOST_SPIRIT_TERMINAL_X
-#define BOOST_SPIRIT_TERMINAL_X0
-#define BOOST_SPIRIT_TERMINAL_Y0
-
-#ifndef BOOST_SPIRIT_NO_PREDEFINED_TERMINALS
-
-#define BOOST_SPIRIT_TERMINAL_NAME(name, type_name)                             \
-    namespace tag { struct name { BOOST_SPIRIT_IS_TAG() }; }                    \
-    typedef boost::proto::terminal<tag::name>::type type_name;                  \
-    type_name const name = {{}};                                                \
-    inline void BOOST_PP_CAT(silence_unused_warnings_, name)() { (void) name; } \
-    /***/
-
-#else
-
-#define BOOST_SPIRIT_TERMINAL_NAME(name, type_name)                             \
-    namespace tag { struct name { BOOST_SPIRIT_IS_TAG() }; }                    \
-    typedef boost::proto::terminal<tag::name>::type type_name;                  \
-    /***/
-
-#endif
-
 #define BOOST_SPIRIT_TERMINAL(name)                                             \
-    BOOST_SPIRIT_TERMINAL_NAME(name, name ## _type)                             \
+    namespace tag { struct name {};  }                                          \
+    typedef boost::proto::terminal<tag::name>::type name##_type;                \
+    name##_type const name = {{}};                                              \
+    inline void silence_unused_warnings__##name() { (void) name; }              \
     /***/
 
-#define BOOST_SPIRIT_DEFINE_TERMINALS_NAME_A(r, _, names)                       \
-    BOOST_SPIRIT_TERMINAL_NAME(                                                 \
-        BOOST_PP_TUPLE_ELEM(2, 0, names),                                       \
-        BOOST_PP_TUPLE_ELEM(2, 1, names)                                        \
-    )                                                                           \
+#define BOOST_SPIRIT_DEFINE_TERMINALS_A(r, _, name)                             \
+    BOOST_SPIRIT_TERMINAL(name)                                                 \
     /***/
 
-#define BOOST_SPIRIT_DEFINE_TERMINALS_NAME(seq)                                 \
-    BOOST_PP_SEQ_FOR_EACH(BOOST_SPIRIT_DEFINE_TERMINALS_NAME_A, _,              \
-        BOOST_PP_CAT(BOOST_SPIRIT_TERMINAL_X seq, 0))                           \
+#define BOOST_SPIRIT_DEFINE_TERMINALS(seq)                                      \
+    BOOST_PP_SEQ_FOR_EACH(BOOST_SPIRIT_DEFINE_TERMINALS_A, _, seq)              \
     /***/
 
 // Define a spirit extended terminal. This macro may be placed in any namespace.
 // Common placeholders are placed in the main boost::spirit namespace
 // (see common_terminals.hpp)
 
-#ifndef BOOST_SPIRIT_NO_PREDEFINED_TERMINALS
-
-#define BOOST_SPIRIT_TERMINAL_NAME_EX(name, type_name)                          \
-    namespace tag { struct name { BOOST_SPIRIT_IS_TAG() }; }                    \
-    typedef boost::spirit::terminal<tag::name> type_name;                       \
-    type_name const name = type_name();                                         \
-    inline void BOOST_PP_CAT(silence_unused_warnings_, name)() { (void) name; } \
-    /***/
-
-#else
-
-#define BOOST_SPIRIT_TERMINAL_NAME_EX(name, type_name)                          \
-    namespace tag { struct name { BOOST_SPIRIT_IS_TAG() }; }                    \
-    typedef boost::spirit::terminal<tag::name> type_name;                       \
-    /***/
-
-#endif
-
 #define BOOST_SPIRIT_TERMINAL_EX(name)                                          \
-    BOOST_SPIRIT_TERMINAL_NAME_EX(name, name ## _type)                          \
+    namespace tag { struct name {}; }                                           \
+    typedef boost::spirit::terminal<tag::name> name##_type;                     \
+    name##_type const name = name##_type();                                     \
+    inline void silence_unused_warnings__##name() { (void) name; }              \
     /***/
 
-#define BOOST_SPIRIT_DEFINE_TERMINALS_NAME_EX_A(r, _, names)                    \
-    BOOST_SPIRIT_TERMINAL_NAME_EX(                                              \
-        BOOST_PP_TUPLE_ELEM(2, 0, names),                                       \
-        BOOST_PP_TUPLE_ELEM(2, 1, names)                                        \
-    )                                                                           \
+#define BOOST_SPIRIT_DEFINE_TERMINALS_EX_A(r, _, name)                          \
+    BOOST_SPIRIT_TERMINAL_EX(name)                                              \
     /***/
 
-#define BOOST_SPIRIT_DEFINE_TERMINALS_NAME_EX(seq)                              \
-    BOOST_PP_SEQ_FOR_EACH(BOOST_SPIRIT_DEFINE_TERMINALS_NAME_EX_A, _,           \
-        BOOST_PP_CAT(BOOST_SPIRIT_TERMINAL_X seq, 0))                           \
+#define BOOST_SPIRIT_DEFINE_TERMINALS_EX(seq)                                   \
+    BOOST_PP_SEQ_FOR_EACH(BOOST_SPIRIT_DEFINE_TERMINALS_EX_A, _, seq)           \
     /***/
 
 #endif

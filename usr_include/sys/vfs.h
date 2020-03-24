@@ -1,1 +1,4 @@
-../x86_64-linux-gnu/sys/vfs.h
+/* Other systems declare `struct statfs' et al in <sys/vfs.h>,
+   so we have this file to be compatible with programs expecting it.  */
+
+#include <sys/statfs.h>

@@ -1,10 +1,9 @@
 #ifndef _X_TABLES_H
 #define _X_TABLES_H
-#include <linux/kernel.h>
+
 #include <linux/types.h>
 
 #define XT_FUNCTION_MAXNAMELEN 30
-#define XT_EXTENSION_MAXNAMELEN 29
 #define XT_TABLE_MAXNAMELEN 32
 
 struct xt_entry_match {
@@ -13,7 +12,8 @@ struct xt_entry_match {
 			__u16 match_size;
 
 			/* Used by userspace */
-			char name[XT_EXTENSION_MAXNAMELEN];
+			char name[XT_FUNCTION_MAXNAMELEN-1];
+
 			__u8 revision;
 		} user;
 		struct {
@@ -36,7 +36,8 @@ struct xt_entry_target {
 			__u16 target_size;
 
 			/* Used by userspace */
-			char name[XT_EXTENSION_MAXNAMELEN];
+			char name[XT_FUNCTION_MAXNAMELEN-1];
+
 			__u8 revision;
 		} user;
 		struct {
@@ -66,15 +67,11 @@ struct xt_standard_target {
 	int verdict;
 };
 
-struct xt_error_target {
-	struct xt_entry_target target;
-	char errorname[XT_FUNCTION_MAXNAMELEN];
-};
-
 /* The argument to IPT_SO_GET_REVISION_*.  Returns highest revision
  * kernel supports, if >= revision. */
 struct xt_get_revision {
-	char name[XT_EXTENSION_MAXNAMELEN];
+	char name[XT_FUNCTION_MAXNAMELEN-1];
+
 	__u8 revision;
 };
 
@@ -96,7 +93,7 @@ struct _xt_align {
 	__u64 u64;
 };
 
-#define XT_ALIGN(s) __ALIGN_KERNEL((s), __alignof__(struct _xt_align))
+#define XT_ALIGN(s) ALIGN((s), __alignof__(struct _xt_align))
 
 /* Standard return verdict, or do jump. */
 #define XT_STANDARD_TARGET ""

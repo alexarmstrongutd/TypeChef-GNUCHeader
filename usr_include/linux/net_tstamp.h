@@ -26,17 +26,17 @@ enum {
 };
 
 /**
- * struct hwtstamp_config - %SIOCGHWTSTAMP and %SIOCSHWTSTAMP parameter
+ * struct hwtstamp_config - %SIOCSHWTSTAMP parameter
  *
- * @flags:	no flags defined right now, must be zero for %SIOCSHWTSTAMP
+ * @flags:	no flags defined right now, must be zero
  * @tx_type:	one of HWTSTAMP_TX_*
  * @rx_type:	one of one of HWTSTAMP_FILTER_*
  *
- * %SIOCGHWTSTAMP and %SIOCSHWTSTAMP expect a &struct ifreq with a
- * ifr_data pointer to this structure.  For %SIOCSHWTSTAMP, if the
- * driver or hardware does not support the requested @rx_filter value,
- * the driver may use a more general filter mode.  In this case
- * @rx_filter will indicate the actual mode on return.
+ * %SIOCSHWTSTAMP expects a &struct ifreq with a ifr_data pointer to
+ * this structure. dev_ifsioc() in the kernel takes care of the
+ * translation between 32 bit userspace and 64 bit kernel. The
+ * structure is intentionally chosen so that it has the same layout on
+ * 32 and 64 bit systems, don't break this!
  */
 struct hwtstamp_config {
 	int flags;
@@ -45,7 +45,7 @@ struct hwtstamp_config {
 };
 
 /* possible values for hwtstamp_config->tx_type */
-enum hwtstamp_tx_types {
+enum {
 	/*
 	 * No outgoing packet will need hardware time stamping;
 	 * should a packet arrive which asks for it, no hardware
@@ -60,19 +60,10 @@ enum hwtstamp_tx_types {
 	 * before sending the packet.
 	 */
 	HWTSTAMP_TX_ON,
-
-	/*
-	 * Enables time stamping for outgoing packets just as
-	 * HWTSTAMP_TX_ON does, but also enables time stamp insertion
-	 * directly into Sync packets. In this case, transmitted Sync
-	 * packets will not received a time stamp via the socket error
-	 * queue.
-	 */
-	HWTSTAMP_TX_ONESTEP_SYNC,
 };
 
 /* possible values for hwtstamp_config->rx_filter */
-enum hwtstamp_rx_filters {
+enum {
 	/* time stamp no incoming packet at all */
 	HWTSTAMP_FILTER_NONE,
 

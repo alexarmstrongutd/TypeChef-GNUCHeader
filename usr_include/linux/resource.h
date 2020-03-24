@@ -2,7 +2,6 @@
 #define _LINUX_RESOURCE_H
 
 #include <linux/time.h>
-#include <linux/types.h>
 
 /*
  * Resource control/accounting header file for linux
@@ -44,13 +43,6 @@ struct rlimit {
 	unsigned long	rlim_max;
 };
 
-#define RLIM64_INFINITY		(~0ULL)
-
-struct rlimit64 {
-	__u64 rlim_cur;
-	__u64 rlim_max;
-};
-
 #define	PRIO_MIN	(-20)
 #define	PRIO_MAX	20
 
@@ -61,8 +53,11 @@ struct rlimit64 {
 /*
  * Limit the stack by to some sane default: root can always
  * increase this limit if needed..  8MB seems reasonable.
+ *
+ * (2MB more to cover randomization effects.)
  */
-#define _STK_LIM	(8*1024*1024)
+#define _STK_LIM	(10*1024*1024)
+#define EXEC_STACK_BIAS	(2*1024*1024)
 
 /*
  * GPG2 wants 64kB of mlocked memory, to make sure pass phrases
@@ -77,4 +72,4 @@ struct rlimit64 {
 #include <asm/resource.h>
 
 
-#endif /* _LINUX_RESOURCE_H */
+#endif
