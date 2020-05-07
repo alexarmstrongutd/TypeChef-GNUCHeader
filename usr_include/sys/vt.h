@@ -1,1 +1,1 @@
-../x86_64-linux-gnu/sys/vt.h
+#include <linux/vt.h>
