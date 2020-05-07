@@ -37,7 +37,7 @@ basic_text_oprimitive<OStream>::save_binary(
     
     if(os.fail())
         boost::serialization::throw_exception(
-            archive_exception(archive_exception::output_stream_error)
+            archive_exception(archive_exception::stream_error)
         );
         
     os.put('\n');
@@ -51,7 +51,7 @@ basic_text_oprimitive<OStream>::save_binary(
                     8
                 >
             > 
-            ,76
+            ,72
             ,const char // cwpro8 needs this
         > 
         base64_text;
@@ -84,7 +84,7 @@ basic_text_oprimitive<OStream>::basic_text_oprimitive(
     flags_saver(os_),
     precision_saver(os_),
     archive_locale(NULL),
-    locale_saver(* os_.rdbuf())
+    locale_saver(os_)
 {
     if(! no_codecvt){
         archive_locale.reset(

@@ -172,7 +172,6 @@ public:
             bool end_state_ = *ptr_ != 0;
             std::size_t id_ = *(ptr_ + id_index);
             std::size_t uid_ = *(ptr_ + unique_id_index);
-            std::size_t end_start_state_ = start_state_;
             bool end_bol_ = bol_;
             FwdIter end_token_ = start_token_;
 
@@ -212,7 +211,7 @@ public:
                     end_state_ = true;
                     id_ = *(ptr_ + id_index);
                     uid_ = *(ptr_ + unique_id_index);
-                    end_start_state_ = *(ptr_ + state_index);
+                    start_state_ = *(ptr_ + state_index);
                     end_bol_ = bol_;
                     end_token_ = curr_;
                 }
@@ -229,7 +228,7 @@ public:
                     end_state_ = true;
                     id_ = *(ptr_ + id_index);
                     uid_ = *(ptr_ + unique_id_index);
-                    end_start_state_ = *(ptr_ + state_index);
+                    start_state_ = *(ptr_ + state_index);
                     end_bol_ = bol_;
                     end_token_ = curr_;
                 }
@@ -238,17 +237,13 @@ public:
             if (end_state_)
             {
                 // return longest match
-                start_state_ = end_start_state_;
+                _data.bol = end_bol_;
                 start_token_ = end_token_;
 
                 if (id_ == 0)
                 {
-                    bol_ = end_bol_;
+                    bol_ = _data.bol;
                     goto again;
-                }
-                else
-                {
-                    _data.bol = end_bol_;
                 }
             }
             else
@@ -284,7 +279,6 @@ public:
             bool end_state_ = *ptr_ != 0;
             std::size_t id_ = *(ptr_ + id_index);
             std::size_t uid_ = *(ptr_ + unique_id_index);
-            std::size_t end_start_state_ = start_state_;
             FwdIter end_token_ = start_token_;
 
             while (curr_ != end_)
@@ -304,7 +298,7 @@ public:
                     end_state_ = true;
                     id_ = *(ptr_ + id_index);
                     uid_ = *(ptr_ + unique_id_index);
-                    end_start_state_ = *(ptr_ + state_index);
+                    start_state_ = *(ptr_ + state_index);
                     end_token_ = curr_;
                 }
             }
@@ -312,7 +306,6 @@ public:
             if (end_state_)
             {
                 // return longest match
-                start_state_ = end_start_state_;
                 start_token_ = end_token_;
 
                 if (id_ == 0) goto again;
@@ -408,8 +401,8 @@ public:
             if (end_state_)
             {
                 // return longest match
-                _data.bol = end_bol_;
                 start_token_ = end_token_;
+                _data.bol = end_bol_;
             }
             else
             {

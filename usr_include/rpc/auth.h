@@ -1,7 +1,7 @@
 /*
  * auth.h, Authentication interface.
  *
- * Copyright (c) 2010, Oracle America, Inc.
+ * Copyright (C) 1984, Sun Microsystems, Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -13,7 +13,7 @@
  *       copyright notice, this list of conditions and the following
  *       disclaimer in the documentation and/or other materials
  *       provided with the distribution.
- *     * Neither the name of the "Oracle America, Inc." nor the names of its
+ *     * Neither the name of Sun Microsystems, Inc. nor the names of its
  *       contributors may be used to endorse or promote products derived
  *       from this software without specific prior written permission.
  *
@@ -180,11 +180,11 @@ extern AUTH *authdes_pk_create (const char *, netobj *, u_int,
  *
  */
 extern int getnetname (char *) __THROW;
-extern int host2netname (char *, const char *, const char *) __THROW;
-extern int user2netname (char *, const uid_t, const char *) __THROW;
-extern int netname2user (const char *, uid_t *, gid_t *, int *, gid_t *)
+extern int host2netname (char *, __const char *, __const char *) __THROW;
+extern int user2netname (char *, __const uid_t, __const char *) __THROW;
+extern int netname2user (__const char *, uid_t *, gid_t *, int *, gid_t *)
      __THROW;
-extern int netname2host (const char *, char *, const int) __THROW;
+extern int netname2host (__const char *, char *, __const int) __THROW;
 
 /*
  *

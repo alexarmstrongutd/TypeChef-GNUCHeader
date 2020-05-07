@@ -1,4 +1,5 @@
-/* Copyright (C) 1991-2014 Free Software Foundation, Inc.
+/* Copyright (C) 1991,1992,1996,1997,1999,2000,2001,2009,2010
+   Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -12,8 +13,9 @@
    Lesser General Public License for more details.
 
    You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, see
-   <http://www.gnu.org/licenses/>.  */
+   License along with the GNU C Library; if not, write to the Free
+   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   02111-1307 USA.  */
 
 #ifndef	_STRINGS_H
 #define	_STRINGS_H	1
@@ -27,12 +29,8 @@
 # define __need_size_t
 # include <stddef.h>
 
-/* Provide correct C++ prototypes, and indicate this to the caller.  This
-   requires a compatible C++ standard library.  As a heuristic, we provide
-   these when the compiler indicates full conformance with C++98 or later,
-   and for older GCC versions that are known to provide a compatible
-   libstdc++.  */
-# if defined __cplusplus && (__cplusplus >= 199711L || __GNUC_PREREQ (4, 4))
+/* Tell the caller that we provide correct C++ prototypes.  */
+# if defined __cplusplus && __GNUC_PREREQ (4, 4)
 #  define __CORRECT_ISO_CPP_STRINGS_H_PROTO
 # endif
 
@@ -40,11 +38,11 @@ __BEGIN_DECLS
 
 # if defined __USE_MISC || !defined __USE_XOPEN2K8
 /* Compare N bytes of S1 and S2 (same as memcmp).  */
-extern int bcmp (const void *__s1, const void *__s2, size_t __n)
+extern int bcmp (__const void *__s1, __const void *__s2, size_t __n)
      __THROW __attribute_pure__;
 
 /* Copy N bytes of SRC to DEST (like memmove, but args reversed).  */
-extern void bcopy (const void *__src, void *__dest, size_t __n) __THROW;
+extern void bcopy (__const void *__src, void *__dest, size_t __n) __THROW;
 
 /* Set N bytes of S to 0.  */
 extern void bzero (void *__s, size_t __n) __THROW;
@@ -55,7 +53,7 @@ extern "C++"
 {
 extern char *index (char *__s, int __c)
      __THROW __asm ("index") __attribute_pure__ __nonnull ((1));
-extern const char *index (const char *__s, int __c)
+extern __const char *index (__const char *__s, int __c)
      __THROW __asm ("index") __attribute_pure__ __nonnull ((1));
 
 #   if defined __OPTIMIZE__ && !defined __CORRECT_ISO_CPP_STRING_H_PROTO
@@ -65,15 +63,15 @@ index (char *__s, int __c) __THROW
   return __builtin_index (__s, __c);
 }
 
-__extern_always_inline const char *
-index (const char *__s, int __c) __THROW
+__extern_always_inline __const char *
+index (__const char *__s, int __c) __THROW
 {
   return __builtin_index (__s, __c);
 }
 #   endif
 }
 #  else
-extern char *index (const char *__s, int __c)
+extern char *index (__const char *__s, int __c)
      __THROW __attribute_pure__ __nonnull ((1));
 #  endif
 
@@ -83,7 +81,7 @@ extern "C++"
 {
 extern char *rindex (char *__s, int __c)
      __THROW __asm ("rindex") __attribute_pure__ __nonnull ((1));
-extern const char *rindex (const char *__s, int __c)
+extern __const char *rindex (__const char *__s, int __c)
      __THROW __asm ("rindex") __attribute_pure__ __nonnull ((1));
 
 #   if defined __OPTIMIZE__ && !defined __CORRECT_ISO_CPP_STRING_H_PROTO
@@ -93,15 +91,15 @@ rindex (char *__s, int __c) __THROW
   return __builtin_rindex (__s, __c);
 }
 
-__extern_always_inline const char *
-rindex (const char *__s, int __c) __THROW
+__extern_always_inline __const char *
+rindex (__const char *__s, int __c) __THROW
 {
   return __builtin_rindex (__s, __c);
 }
 #   endif
 }
 #  else
-extern char *rindex (const char *__s, int __c)
+extern char *rindex (__const char *__s, int __c)
      __THROW __attribute_pure__ __nonnull ((1));
 #  endif
 # endif
@@ -113,11 +111,11 @@ extern int ffs (int __i) __THROW __attribute__ ((const));
 #endif
 
 /* Compare S1 and S2, ignoring case.  */
-extern int strcasecmp (const char *__s1, const char *__s2)
+extern int strcasecmp (__const char *__s1, __const char *__s2)
      __THROW __attribute_pure__;
 
 /* Compare no more than N chars of S1 and S2, ignoring case.  */
-extern int strncasecmp (const char *__s1, const char *__s2, size_t __n)
+extern int strncasecmp (__const char *__s1, __const char *__s2, size_t __n)
      __THROW __attribute_pure__;
 
 #ifdef	__USE_XOPEN2K8
@@ -128,10 +126,11 @@ extern int strncasecmp (const char *__s1, const char *__s2, size_t __n)
 
 /* Again versions of a few functions which use the given locale instead
    of the global one.  */
-extern int strcasecmp_l (const char *__s1, const char *__s2, __locale_t __loc)
+extern int strcasecmp_l (__const char *__s1, __const char *__s2,
+			 __locale_t __loc)
      __THROW __attribute_pure__ __nonnull ((1, 2, 3));
 
-extern int strncasecmp_l (const char *__s1, const char *__s2,
+extern int strncasecmp_l (__const char *__s1, __const char *__s2,
 			  size_t __n, __locale_t __loc)
      __THROW __attribute_pure__ __nonnull ((1, 2, 4));
 #endif

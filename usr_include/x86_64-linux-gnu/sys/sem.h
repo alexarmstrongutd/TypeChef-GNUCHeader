@@ -1,4 +1,4 @@
-/* Copyright (C) 1995-2014 Free Software Foundation, Inc.
+/* Copyright (C) 1995-1999, 2000, 2003 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -12,8 +12,9 @@
    Lesser General Public License for more details.
 
    You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, see
-   <http://www.gnu.org/licenses/>.  */
+   License along with the GNU C Library; if not, write to the Free
+   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   02111-1307 USA.  */
 
 #ifndef _SYS_SEM_H
 #define _SYS_SEM_H	1
@@ -60,7 +61,7 @@ extern int semop (int __semid, struct sembuf *__sops, size_t __nsops) __THROW;
 #ifdef __USE_GNU
 /* Operate on semaphore with timeout.  */
 extern int semtimedop (int __semid, struct sembuf *__sops, size_t __nsops,
-		       const struct timespec *__timeout) __THROW;
+		       __const struct timespec *__timeout) __THROW;
 #endif
 
 __END_DECLS

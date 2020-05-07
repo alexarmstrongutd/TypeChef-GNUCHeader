@@ -1,3 +1,6 @@
+#ifndef _LINUX_APM_H
+#define _LINUX_APM_H
+
 /*
  * Include file for the interface to an APM BIOS
  * Copyright 1994-2001 Stephen Rothwell (sfr@canb.auug.org.au)
@@ -12,9 +15,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
  */
-#ifndef _LINUX_APM_H
-#define _LINUX_APM_H
-
 
 #include <linux/types.h>
 
@@ -132,4 +132,4 @@ struct apm_bios_info {
 #define APM_IOC_STANDBY		_IO('A', 1)
 #define APM_IOC_SUSPEND		_IO('A', 2)
 
-#endif /* _LINUX_APM_H */
+#endif	/* LINUX_APM_H */

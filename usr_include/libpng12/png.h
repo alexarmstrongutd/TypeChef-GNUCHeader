@@ -1,7 +1,7 @@
 /* png.h - header file for PNG reference library
  *
- * libpng version 1.2.50 - July 10, 2012
- * Copyright (c) 1998-2012 Glenn Randers-Pehrson
+ * libpng version 1.2.44 - June 26, 2010
+ * Copyright (c) 1998-2010 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  *
@@ -10,7 +10,7 @@
  * Authors and maintainers:
  *  libpng versions 0.71, May 1995, through 0.88, January 1996: Guy Schalnat
  *  libpng versions 0.89c, June 1996, through 0.96, May 1997: Andreas Dilger
- *  libpng versions 0.97, January 1998, through 1.2.50 - July 10, 2012: Glenn
+ *  libpng versions 0.97, January 1998, through 1.2.44 - June 26, 2010: Glenn
  *  See also "Contributing Authors", below.
  *
  * Note about libpng version numbers:
@@ -231,7 +231,7 @@
  *    1.2.37beta01-03         13    10237  12.so.0.37[.0]
  *    1.2.37rc01              13    10237  12.so.0.37[.0]
  *    1.2.37                  13    10237  12.so.0.37[.0]
- *    1.0.45                  10    10045  12.so.0.45[.0]
+ *    1.2.45                  10    10045  12.so.0.45[.0]
  *    1.0.46                  10    10046  10.so.0.46[.0]
  *    1.2.38beta01            13    10238  12.so.0.38[.0]
  *    1.2.38rc01-03           13    10238  12.so.0.38[.0]
@@ -262,28 +262,6 @@
  *    1.2.44beta01-03         13    10244  12.so.0.44[.0]
  *    1.2.44rc01-03           13    10244  12.so.0.44[.0]
  *    1.2.44                  13    10244  12.so.0.44[.0]
- *    1.2.45beta01-03         13    10245  12.so.0.45[.0]
- *    1.0.55rc01              10    10055  10.so.0.55[.0]
- *    1.2.45rc01              13    10245  12.so.0.45[.0]
- *    1.0.55                  10    10055  10.so.0.55[.0]
- *    1.2.45                  13    10245  12.so.0.45[.0]
- *    1.2.46rc01-02           13    10246  12.so.0.46[.0]
- *    1.0.56                  10    10056  10.so.0.56[.0]
- *    1.2.46                  13    10246  12.so.0.46[.0]
- *    1.2.47beta01            13    10247  12.so.0.47[.0]
- *    1.2.47rc01              13    10247  12.so.0.47[.0]
- *    1.0.57rc01              10    10057  10.so.0.57[.0]
- *    1.2.47                  13    10247  12.so.0.47[.0]
- *    1.0.57                  10    10057  10.so.0.57[.0]
- *    1.2.48beta01            13    10248  12.so.0.48[.0]
- *    1.2.48rc01-02           13    10248  12.so.0.48[.0]
- *    1.0.58                  10    10058  10.so.0.58[.0]
- *    1.2.48                  13    10248  12.so.0.48[.0]
- *    1.2.49rc01              13    10249  12.so.0.49[.0]
- *    1.0.59                  10    10059  10.so.0.59[.0]
- *    1.2.49                  13    10249  12.so.0.49[.0]
- *    1.0.60                  10    10060  10.so.0.60[.0]
- *    1.2.50                  13    10250  12.so.0.50[.0]
  *
  *    Henceforth the source version will match the shared-library major
  *    and minor numbers; the shared-library major version number will be
@@ -315,8 +293,8 @@
  *
  * This code is released under the libpng license.
  *
- * libpng versions 1.2.6, August 15, 2004, through 1.2.50, July 10, 2012, are
- * Copyright (c) 2004, 2006-2011 Glenn Randers-Pehrson, and are
+ * libpng versions 1.2.6, August 15, 2004, through 1.2.44, June 26, 2010, are
+ * Copyright (c) 2004, 2006-2010 Glenn Randers-Pehrson, and are
  * distributed according to the same disclaimer and license as libpng-1.2.5
  * with the following individual added to the list of Contributing Authors:
  *
@@ -427,13 +405,13 @@
  * Y2K compliance in libpng:
  * =========================
  *
- *    July 10, 2012
+ *    June 26, 2010
  *
  *    Since the PNG Development group is an ad-hoc body, we can't make
  *    an official declaration.
  *
  *    This is your unofficial assurance that libpng from version 0.71 and
- *    upward through 1.2.50 are Y2K compliant.  It is my belief that earlier
+ *    upward through 1.2.44 are Y2K compliant.  It is my belief that earlier
  *    versions were also Y2K compliant.
  *
  *    Libpng only has three year fields.  One is a 2-byte unsigned integer
@@ -489,9 +467,9 @@
  */
 
 /* Version information for png.h - this should match the version in png.c */
-#define PNG_LIBPNG_VER_STRING "1.2.50"
+#define PNG_LIBPNG_VER_STRING "1.2.44"
 #define PNG_HEADER_VERSION_STRING \
-   " libpng version 1.2.50 - July 10, 2012\n"
+   " libpng version 1.2.44 - June 26, 2010\n"
 
 #define PNG_LIBPNG_VER_SONUM   0
 #define PNG_LIBPNG_VER_DLLNUM  13
@@ -499,7 +477,7 @@
 /* These should match the first 3 components of PNG_LIBPNG_VER_STRING: */
 #define PNG_LIBPNG_VER_MAJOR   1
 #define PNG_LIBPNG_VER_MINOR   2
-#define PNG_LIBPNG_VER_RELEASE 50
+#define PNG_LIBPNG_VER_RELEASE 44
 /* This should match the numeric part of the final component of
  * PNG_LIBPNG_VER_STRING, omitting any leading zero:
  */
@@ -529,7 +507,7 @@
  * version 1.0.0 was mis-numbered 100 instead of 10000).  From
  * version 1.0.1 it's    xxyyzz, where x=major, y=minor, z=release
  */
-#define PNG_LIBPNG_VER 10250 /* 1.2.50 */
+#define PNG_LIBPNG_VER 10244 /* 1.2.44 */
 
 #ifndef PNG_VERSION_INFO_ONLY
 /* Include the compression library's header */
@@ -1569,7 +1547,7 @@ struct png_struct_def
 /* This triggers a compiler error in png.c, if png.c and png.h
  * do not agree upon the version number.
  */
-typedef png_structp version_1_2_50;
+typedef png_structp version_1_2_44;
 
 typedef png_struct FAR * FAR * png_structpp;
 
@@ -1902,17 +1880,15 @@ extern PNG_EXPORT(void,png_destroy_read_struct) PNGARG((png_structpp
    png_ptr_ptr, png_infopp info_ptr_ptr, png_infopp end_info_ptr_ptr));
 
 /* Free all memory used by the read (old method - NOT DLL EXPORTED) */
-/* Debian note: exporting as it is required by legacy applications */
-extern PNG_EXPORT(void,png_read_destroy) PNGARG((png_structp png_ptr, png_infop info_ptr,
-   png_infop end_info_ptr));
+extern void png_read_destroy PNGARG((png_structp png_ptr, png_infop info_ptr,
+   png_infop end_info_ptr)) PNG_DEPRECATED;
 
 /* Free any memory associated with the png_struct and the png_info_structs */
 extern PNG_EXPORT(void,png_destroy_write_struct)
    PNGARG((png_structpp png_ptr_ptr, png_infopp info_ptr_ptr));
 
 /* Free any memory used in png_ptr struct (old method - NOT DLL EXPORTED) */
-/* Debian note: exporting as it is required by legacy applications */
-extern PNG_EXPORT(void,png_write_destroy) PNGARG((png_structp png_ptr));
+extern void png_write_destroy PNGARG((png_structp png_ptr)) PNG_DEPRECATED;
 
 /* Set the libpng method of handling chunk CRC errors */
 extern PNG_EXPORT(void,png_set_crc_action) PNGARG((png_structp png_ptr,
@@ -2658,7 +2634,7 @@ extern PNG_EXPORT(void, png_write_png) PNGARG((png_structp png_ptr,
 #      define png_debug(l,m) \
        { \
        int num_tabs=l; \
-       fprintf(PNG_DEBUG_FILE,"%s" m PNG_STRING_NEWLINE,(num_tabs==1 ? "\t" : \
+       fprintf(PNG_DEBUG_FILE,"%s"m PNG_STRING_NEWLINE,(num_tabs==1 ? "\t" : \
          (num_tabs==2 ? "\t\t":(num_tabs>2 ? "\t\t\t":"")))); \
        }
 #    endif
@@ -2666,7 +2642,7 @@ extern PNG_EXPORT(void, png_write_png) PNGARG((png_structp png_ptr,
 #      define png_debug1(l,m,p1) \
        { \
        int num_tabs=l; \
-       fprintf(PNG_DEBUG_FILE,"%s" m PNG_STRING_NEWLINE,(num_tabs==1 ? "\t" : \
+       fprintf(PNG_DEBUG_FILE,"%s"m PNG_STRING_NEWLINE,(num_tabs==1 ? "\t" : \
          (num_tabs==2 ? "\t\t":(num_tabs>2 ? "\t\t\t":""))),p1); \
        }
 #    endif
@@ -2674,7 +2650,7 @@ extern PNG_EXPORT(void, png_write_png) PNGARG((png_structp png_ptr,
 #      define png_debug2(l,m,p1,p2) \
        { \
        int num_tabs=l; \
-       fprintf(PNG_DEBUG_FILE,"%s" m PNG_STRING_NEWLINE,(num_tabs==1 ? "\t" : \
+       fprintf(PNG_DEBUG_FILE,"%s"m PNG_STRING_NEWLINE,(num_tabs==1 ? "\t" : \
          (num_tabs==2 ? "\t\t":(num_tabs>2 ? "\t\t\t":""))),p1,p2); \
        }
 #    endif

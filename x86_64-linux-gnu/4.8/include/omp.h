@@ -1,4 +1,4 @@
-/* Copyright (C) 2005-2013 Free Software Foundation, Inc.
+/* Copyright (C) 2005, 2007, 2008, 2009 Free Software Foundation, Inc.
    Contributed by Richard Henderson <rth@redhat.com>.
 
    This file is part of the GNU OpenMP Library (libgomp).
@@ -39,13 +39,8 @@ typedef struct
 
 typedef struct
 {
-#if defined(__linux__)
   unsigned char _x[8 + sizeof (void *)] 
     __attribute__((__aligned__(sizeof (void *))));
-#else
-  unsigned char _x[16] 
-    __attribute__((__aligned__(8)));
-#endif
 } omp_nest_lock_t;
 #endif
 
@@ -102,8 +97,6 @@ int omp_get_level (void) __GOMP_NOTHROW;
 int omp_get_ancestor_thread_num (int) __GOMP_NOTHROW;
 int omp_get_team_size (int) __GOMP_NOTHROW;
 int omp_get_active_level (void) __GOMP_NOTHROW;
-
-int omp_in_final (void) __GOMP_NOTHROW;
 
 #ifdef __cplusplus
 }

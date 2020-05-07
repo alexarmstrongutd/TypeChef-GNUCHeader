@@ -1,5 +1,5 @@
 #ifndef _INET_DIAG_H_
-#define _INET_DIAG_H_
+#define _INET_DIAG_H_ 1
 
 #include <linux/types.h>
 
@@ -32,15 +32,6 @@ struct inet_diag_req {
 
 	__u32	idiag_states;		/* States to dump */
 	__u32	idiag_dbs;		/* Tables to dump (NI) */
-};
-
-struct inet_diag_req_v2 {
-	__u8	sdiag_family;
-	__u8	sdiag_protocol;
-	__u8	idiag_ext;
-	__u8	pad;
-	__u32	idiag_states;
-	struct inet_diag_sockid id;
 };
 
 enum {
@@ -106,13 +97,9 @@ enum {
 	INET_DIAG_INFO,
 	INET_DIAG_VEGASINFO,
 	INET_DIAG_CONG,
-	INET_DIAG_TOS,
-	INET_DIAG_TCLASS,
-	INET_DIAG_SKMEMINFO,
-	INET_DIAG_SHUTDOWN,
 };
 
-#define INET_DIAG_MAX INET_DIAG_SHUTDOWN
+#define INET_DIAG_MAX INET_DIAG_CONG
 
 
 /* INET_DIAG_MEM */

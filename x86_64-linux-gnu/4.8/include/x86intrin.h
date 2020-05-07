@@ -1,4 +1,4 @@
-/* Copyright (C) 2008-2013 Free Software Foundation, Inc.
+/* Copyright (C) 2008, 2009 Free Software Foundation, Inc.
 
    This file is part of GCC.
 
@@ -23,8 +23,6 @@
 
 #ifndef _X86INTRIN_H_INCLUDED
 #define _X86INTRIN_H_INCLUDED
-
-#include <ia32intrin.h>
 
 #ifdef __MMX__
 #include <mmintrin.h>
@@ -77,46 +75,12 @@
 #include <lwpintrin.h>
 #endif
 
-#ifdef __BMI__
-#include <bmiintrin.h>
-#endif
-
-#ifdef __BMI2__
-#include <bmi2intrin.h>
-#endif
-
-#ifdef __TBM__
-#include <tbmintrin.h>
-#endif
-
-#ifdef __LZCNT__
-#include <lzcntintrin.h>
+#ifdef __ABM__
+#include <abmintrin.h>
 #endif
 
 #ifdef __POPCNT__
 #include <popcntintrin.h>
 #endif
-
-#ifdef __RDSEED__
-#include <rdseedintrin.h>
-#endif
-
-#ifdef __PRFCHW__
-#include <prfchwintrin.h>
-#endif
-
-#ifdef __FXSR__
-#include <fxsrintrin.h>
-#endif
-
-#ifdef __XSAVE__
-#include <xsaveintrin.h>
-#endif
-
-#ifdef __XSAVEOPT__
-#include <xsaveoptintrin.h>
-#endif
-
-#include <adxintrin.h>
 
 #endif /* _X86INTRIN_H_INCLUDED */

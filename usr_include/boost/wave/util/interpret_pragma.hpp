@@ -3,7 +3,7 @@
 
     http://www.boost.org/
 
-    Copyright (c) 2001-2012 Hartmut Kaiser. Distributed under the Boost
+    Copyright (c) 2001-2009 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -85,18 +85,16 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
                                 [
                                     spirit_assign_actor(option)
                                 ] 
-                            |   pattern_p(KeywordTokenType, 
-                                    TokenTypeMask|PPTokenFlag)
+                            |   pattern_p(KeywordTokenType, TokenTypeMask)
                                 [
                                     spirit_assign_actor(option)
                                 ] 
                             |   pattern_p(OperatorTokenType|AltExtTokenType, 
-                                    ExtTokenTypeMask|PPTokenFlag)   // and, bit_and etc.
+                                    ExtTokenTypeMask)   // and, bit_and etc.
                                 [
                                     spirit_assign_actor(option)
                                 ] 
-                            |   pattern_p(BoolLiteralTokenType, 
-                                    TokenTypeMask|PPTokenFlag)
+                            |   pattern_p(BoolLiteralTokenType, TokenTypeMask)
                                 [
                                     spirit_assign_actor(option)
                                 ] 
@@ -105,13 +103,12 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
                                 ch_p(T_LEFTPAREN),
                                 ch_p(T_RIGHTPAREN)
                             )[spirit_assign_actor(values)],
-                    pattern_p(WhiteSpaceTokenType, TokenTypeMask|PPTokenFlag)).hit)
+                    pattern_p(WhiteSpaceTokenType, TokenTypeMask)).hit)
             {
-                typename ContextT::string_type msg(
-                    impl::as_string<string_type>(it, end));
                 BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
                     ill_formed_pragma_option,
-                    msg.c_str(), act_token.get_position());
+                    impl::as_string<string_type>(it, end).c_str(), 
+                    act_token.get_position());
                 return false;
             }
 
@@ -166,15 +163,14 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
                                     *(anychar_p[spirit_append_actor(values)] - ch_p(T_NEWLINE))
                                 ]
                             ),
-                            pattern_p(WhiteSpaceTokenType, TokenTypeMask|PPTokenFlag)
+                            pattern_p(WhiteSpaceTokenType, TokenTypeMask)
                        ).hit
                )
             {
-                typename ContextT::string_type msg(
-                    impl::as_string<string_type>(it, end));
                 BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
                     ill_formed_pragma_message,
-                    msg.c_str(), act_token.get_position());
+                    impl::as_string<string_type>(it, end).c_str(), 
+                    act_token.get_position());
                 return false;
             }
 
@@ -186,10 +182,9 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
             }
 
         // output the message itself
-            typename ContextT::string_type msg(impl::as_string(values));
             BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
                 pragma_message_directive, 
-                msg.c_str(), act_token.get_position());
+                impl::as_string(values).c_str(), act_token.get_position());
             return false;
         }
 #endif

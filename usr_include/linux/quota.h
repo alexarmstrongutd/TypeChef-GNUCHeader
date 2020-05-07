@@ -168,4 +168,11 @@ enum {
 #define QUOTA_NL_A_MAX (__QUOTA_NL_A_MAX - 1)
 
 
-#endif /* _LINUX_QUOTA_ */
+
+# /* nodep */ include <sys/cdefs.h>
+
+__BEGIN_DECLS
+long quotactl __P ((unsigned int, const char *, int, caddr_t));
+__END_DECLS
+
+#endif /* _QUOTA_ */

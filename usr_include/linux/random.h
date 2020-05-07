@@ -40,4 +40,7 @@ struct rand_pool_info {
 	__u32	buf[0];
 };
 
+/* Exported functions */
+
+
 #endif /* _LINUX_RANDOM_H */

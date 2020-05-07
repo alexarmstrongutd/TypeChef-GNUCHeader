@@ -1,8 +1,8 @@
 
 /* pngconf.h - machine configurable file for libpng
  *
- * libpng version 1.2.50 - July 10, 2012
- * Copyright (c) 1998-2012 Glenn Randers-Pehrson
+ * libpng version 1.2.44 - June 26, 2010
+ * Copyright (c) 1998-2010 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  *
@@ -37,6 +37,25 @@
 #ifdef PNG_CONFIGURE_LIBPNG
 #ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
+#else
+/* pngconf.h is part of the exported API. When a libpng-using application
+   includes us, PNG_CONFIGURE_LIBPNG is of course not defined as we do not have
+   libpng's config.h available in this case. This means that we do not have the
+   defines added to config.h and the commandline by libpng's ./configure .
+   
+   For all defines from config.h not having them set is not a problem, however
+   ./configure also adds -DPNG_NO_ASSEMBLER_CODE to the CFLAGS when compiling
+   on a platform on which the MMX and SSE asm code in libpng is not supported.
+   
+   We do need this define as this define is used to determine whether or not
+   to define PNG_ASSEMBLER_CODE_SUPPORTED and other assembler related defines
+   and prototypes. PNG_ASSEMBLER_CODE_SUPPORTED in turn is used by applications
+   (ImageMagick for example) to determine whether or not they can use the asm
+   functions. Thus we need to define PNG_NO_ASSEMBLER_CODE here on platforms
+   on which the MMX and SSE asm code in libpng is not supported: */
+#ifndef __i386__ /* change this if MMX/SSE become supported on x86_64! */
+#define PNG_NO_ASSEMBLER_CODE
 #endif
 #endif
 

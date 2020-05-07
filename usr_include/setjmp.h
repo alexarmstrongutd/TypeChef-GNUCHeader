@@ -1,4 +1,4 @@
-/* Copyright (C) 1991-2014 Free Software Foundation, Inc.
+/* Copyright (C) 1991-1999,2001,2002,2007,2009 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -12,8 +12,9 @@
    Lesser General Public License for more details.
 
    You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, see
-   <http://www.gnu.org/licenses/>.  */
+   License along with the GNU C Library; if not, write to the Free
+   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   02111-1307 USA.  */
 
 /*
  *	ISO C99 Standard: 7.13 Nonlocal jumps	<setjmp.h>
@@ -49,22 +50,29 @@ typedef struct __jmp_buf_tag jmp_buf[1];
 
 /* Store the calling environment in ENV, also saving the signal mask.
    Return 0.  */
-extern int setjmp (jmp_buf __env) __THROWNL;
+extern int setjmp (jmp_buf __env) __THROW;
 
 __END_NAMESPACE_STD
 
 /* Store the calling environment in ENV, also saving the
    signal mask if SAVEMASK is nonzero.  Return 0.
    This is the internal name for `sigsetjmp'.  */
-extern int __sigsetjmp (struct __jmp_buf_tag __env[1], int __savemask) __THROWNL;
+extern int __sigsetjmp (struct __jmp_buf_tag __env[1], int __savemask) __THROW;
 
+#ifndef	__FAVOR_BSD
 /* Store the calling environment in ENV, not saving the signal mask.
    Return 0.  */
-extern int _setjmp (struct __jmp_buf_tag __env[1]) __THROWNL;
+extern int _setjmp (struct __jmp_buf_tag __env[1]) __THROW;
 
 /* Do not save the signal mask.  This is equivalent to the `_setjmp'
    BSD function.  */
-#define setjmp(env)	_setjmp (env)
+# define setjmp(env)	_setjmp (env)
+#else
+/* We are in 4.3 BSD-compatibility mode in which `setjmp'
+   saves the signal mask like `sigsetjmp (ENV, 1)'.  We have to
+   define a macro since ISO C says `setjmp' is one.  */
+# define setjmp(env)	setjmp (env)
+#endif /* Favor BSD.  */
 
 
 __BEGIN_NAMESPACE_STD
@@ -72,7 +80,7 @@ __BEGIN_NAMESPACE_STD
 /* Jump to the environment saved in ENV, making the
    `setjmp' call there return VAL, or 1 if VAL is 0.  */
 extern void longjmp (struct __jmp_buf_tag __env[1], int __val)
-     __THROWNL __attribute__ ((__noreturn__));
+     __THROW __attribute__ ((__noreturn__));
 
 __END_NAMESPACE_STD
 
@@ -81,7 +89,7 @@ __END_NAMESPACE_STD
    the signal mask.  But it is how ENV was saved that determines whether
    `longjmp' restores the mask; `_longjmp' is just an alias.  */
 extern void _longjmp (struct __jmp_buf_tag __env[1], int __val)
-     __THROWNL __attribute__ ((__noreturn__));
+     __THROW __attribute__ ((__noreturn__));
 #endif
 
 
@@ -100,7 +108,7 @@ typedef struct __jmp_buf_tag sigjmp_buf[1];
    Restore the signal mask if that sigsetjmp call saved it.
    This is just an alias `longjmp'.  */
 extern void siglongjmp (sigjmp_buf __env, int __val)
-     __THROWNL __attribute__ ((__noreturn__));
+     __THROW __attribute__ ((__noreturn__));
 #endif /* Use POSIX.  */
 
 
