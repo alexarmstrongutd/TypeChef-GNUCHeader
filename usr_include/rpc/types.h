@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2010, Oracle America, Inc.
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
@@ -10,7 +9,7 @@
  *       copyright notice, this list of conditions and the following
  *       disclaimer in the documentation and/or other materials
  *       provided with the distribution.
- *     * Neither the name of the "Oracle America, Inc." nor the names of its
+ *     * Neither the name of Sun Microsystems, Inc. nor the names of its
  *       contributors may be used to endorse or promote products derived
  *       from this software without specific prior written permission.
  *
@@ -67,11 +66,6 @@ typedef unsigned long rpcport_t;
 
 #ifndef makedev /* ie, we haven't already included it */
 #include <sys/types.h>
-#endif
-
-#if defined __APPLE_CC__ || defined __FreeBSD__
-# define __u_char_defined
-# define __daddr_t_defined
 #endif
 
 #ifndef __u_char_defined

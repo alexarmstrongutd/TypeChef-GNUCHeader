@@ -1,4 +1,5 @@
-/* Copyright (C) 1995-2014 Free Software Foundation, Inc.
+/* Copyright (C) 1995-1997,1999,2000,2003,2006,2007
+   Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -12,8 +13,9 @@
    Lesser General Public License for more details.
 
    You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, see
-   <http://www.gnu.org/licenses/>.  */
+   License along with the GNU C Library; if not, write to the Free
+   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   02111-1307 USA.  */
 
 #ifndef _SYS_MSG_H
 #define _SYS_MSG_H
@@ -50,7 +52,7 @@ typedef __ssize_t ssize_t;
 /* Template for struct to be used as argument for `msgsnd' and `msgrcv'.  */
 struct msgbuf
   {
-    __syscall_slong_t mtype;	/* type of received/sent message */
+    long int mtype;		/* type of received/sent message */
     char mtext[1];		/* text of the message */
   };
 #endif
@@ -75,7 +77,7 @@ extern ssize_t msgrcv (int __msqid, void *__msgp, size_t __msgsz,
 
    This function is a cancellation point and therefore not marked with
    __THROW.  */
-extern int msgsnd (int __msqid, const void *__msgp, size_t __msgsz,
+extern int msgsnd (int __msqid, __const void *__msgp, size_t __msgsz,
 		   int __msgflg);
 
 __END_DECLS

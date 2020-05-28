@@ -1,5 +1,5 @@
-/* FPU control word bits.  x86 version.
-   Copyright (C) 1993-2014 Free Software Foundation, Inc.
+/* FPU control word bits.  x86-64 version.
+   Copyright (C) 1993,1995,1996,1997,1998,2000,2001,2002 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Olaf Flebbe.
 
@@ -14,8 +14,9 @@
    Lesser General Public License for more details.
 
    You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, see
-   <http://www.gnu.org/licenses/>.  */
+   License along with the GNU C Library; if not, write to the Free
+   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   02111-1307 USA.  */
 
 #ifndef _FPU_CONTROL_H
 #define _FPU_CONTROL_H	1
@@ -90,18 +91,9 @@
 /* Type of the control word.  */
 typedef unsigned int fpu_control_t __attribute__ ((__mode__ (__HI__)));
 
-/* Macros for accessing the hardware control word.  "*&" is used to
-   work around a bug in older versions of GCC.  __volatile__ is used
-   to support combination of writing the control register and reading
-   it back.  Without __volatile__, the old value may be used for reading
-   back under compiler optimization.
-
-   Note that the use of these macros is not sufficient anymore with
-   recent hardware nor on x86-64.  Some floating point operations are
-   executed in the SSE/SSE2 engines which have their own control and
-   status register.  */
-#define _FPU_GETCW(cw) __asm__ __volatile__ ("fnstcw %0" : "=m" (*&cw))
-#define _FPU_SETCW(cw) __asm__ __volatile__ ("fldcw %0" : : "m" (*&cw))
+/* Macros for accessing the hardware control word.  */
+#define _FPU_GETCW(cw) __asm__ ("fnstcw %0" : "=m" (*&cw))
+#define _FPU_SETCW(cw) __asm__ ("fldcw %0" : : "m" (*&cw))
 
 /* Default control word set at startup.  */
 extern fpu_control_t __fpu_control;

@@ -1,4 +1,4 @@
-/* Copyright (C) 2001-2014 Free Software Foundation, Inc.
+/* Copyright (C) 2001, 2003 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -12,11 +12,13 @@
    Lesser General Public License for more details.
 
    You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, see
-   <http://www.gnu.org/licenses/>.  */
+   License along with the GNU C Library; if not, write to the Free
+   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   02111-1307 USA.  */
 
 #ifndef _SYS_DEBUGREG_H
 #define _SYS_DEBUGREG_H	1
+#include <bits/wordsize.h>
 
 /* Indicate the register numbers for a number of the specific
    debug registers.  Registers 0-3 contain the addresses we wish to trap on */
@@ -54,9 +56,7 @@
 #define DR_LEN_1 (0x0)	      /* Settings for data length to trap on */
 #define DR_LEN_2 (0x4)
 #define DR_LEN_4 (0xC)
-#ifdef __x86_64__
-# define DR_LEN_8 (0x8)
-#endif
+#define DR_LEN_8 (0x8)
 
 /* The low byte to the control register determine which registers are
    enabled.  There are 4 fields of two bits.  One bit is "local", meaning
@@ -77,8 +77,8 @@
 
 
 
-#ifdef __x86_64__
-# define DR_CONTROL_RESERVED (0xFFFFFFFF0000FC00ULL) /* Reserved */
+#if __WORDSIZE == 64
+# define DR_CONTROL_RESERVED (0xFFFFFFFF0000FC00UL) /* Reserved */
 #else
 # define DR_CONTROL_RESERVED (0x00FC00U) /* Reserved */
 #endif

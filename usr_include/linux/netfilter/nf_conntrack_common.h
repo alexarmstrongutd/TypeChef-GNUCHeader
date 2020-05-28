@@ -18,16 +18,9 @@ enum ip_conntrack_info {
 	/* >= this indicates reply direction */
 	IP_CT_IS_REPLY,
 
-	IP_CT_ESTABLISHED_REPLY = IP_CT_ESTABLISHED + IP_CT_IS_REPLY,
-	IP_CT_RELATED_REPLY = IP_CT_RELATED + IP_CT_IS_REPLY,
-	IP_CT_NEW_REPLY = IP_CT_NEW + IP_CT_IS_REPLY,	
 	/* Number of distinct IP_CT types (no NEW in reply dirn). */
 	IP_CT_NUMBER = IP_CT_IS_REPLY * 2 - 1
 };
-
-#define NF_CT_STATE_INVALID_BIT			(1 << 0)
-#define NF_CT_STATE_BIT(ctinfo)			(1 << ((ctinfo) % IP_CT_IS_REPLY + 1))
-#define NF_CT_STATE_UNTRACKED_BIT		(1 << (IP_CT_NUMBER + 1))
 
 /* Bitset representing status of connection. */
 enum ip_conntrack_status {
@@ -83,14 +76,6 @@ enum ip_conntrack_status {
 	/* Conntrack is a template */
 	IPS_TEMPLATE_BIT = 11,
 	IPS_TEMPLATE = (1 << IPS_TEMPLATE_BIT),
-
-	/* Conntrack is a fake untracked entry */
-	IPS_UNTRACKED_BIT = 12,
-	IPS_UNTRACKED = (1 << IPS_UNTRACKED_BIT),
-
-	/* Conntrack got a helper explicitly attached via CT target. */
-	IPS_HELPER_BIT = 13,
-	IPS_HELPER = (1 << IPS_HELPER_BIT),
 };
 
 /* Connection tracking event types */
@@ -103,21 +88,13 @@ enum ip_conntrack_events {
 	IPCT_PROTOINFO,		/* protocol information has changed */
 	IPCT_HELPER,		/* new helper has been set */
 	IPCT_MARK,		/* new mark has been set */
-	IPCT_SEQADJ,		/* sequence adjustment has changed */
-	IPCT_NATSEQADJ = IPCT_SEQADJ,
+	IPCT_NATSEQADJ,		/* NAT is doing sequence adjustment */
 	IPCT_SECMARK,		/* new security mark has been set */
-	IPCT_LABEL,		/* new connlabel has been set */
 };
 
 enum ip_conntrack_expect_events {
 	IPEXP_NEW,		/* new expectation */
-	IPEXP_DESTROY,		/* destroyed expectation */
 };
-
-/* expectation flags */
-#define NF_CT_EXPECT_PERMANENT		0x1
-#define NF_CT_EXPECT_INACTIVE		0x2
-#define NF_CT_EXPECT_USERSPACE		0x4
 
 
 #endif /* _NF_CONNTRACK_COMMON_H */

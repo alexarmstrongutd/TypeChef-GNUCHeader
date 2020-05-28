@@ -1,4 +1,4 @@
-/* Copyright (C) 2001-2014 Free Software Foundation, Inc.
+/* Copyright (C) 2001, 2002, 2004 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -12,8 +12,9 @@
    Lesser General Public License for more details.
 
    You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, see
-   <http://www.gnu.org/licenses/>.  */
+   License along with the GNU C Library; if not, write to the Free
+   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   02111-1307 USA.  */
 
 #ifndef _SYS_USER_H
 #define _SYS_USER_H	1
@@ -22,54 +23,54 @@
    too much into it.  Don't use it for anything other than GDB unless
    you know what you are doing.  */
 
-#include <unistd.h>
+#include <bits/wordsize.h>
 
-#ifdef __x86_64__
+#if __WORDSIZE == 64
 
 struct user_fpregs_struct
 {
-  unsigned short int	cwd;
-  unsigned short int	swd;
-  unsigned short int	ftw;
-  unsigned short int	fop;
-  __extension__ unsigned long long int rip;
-  __extension__ unsigned long long int rdp;
-  unsigned int		mxcsr;
-  unsigned int		mxcr_mask;
-  unsigned int		st_space[32];   /* 8*16 bytes for each FP-reg = 128 bytes */
-  unsigned int		xmm_space[64];  /* 16*16 bytes for each XMM-reg = 256 bytes */
-  unsigned int		padding[24];
+  __uint16_t		cwd;
+  __uint16_t		swd;
+  __uint16_t		ftw;
+  __uint16_t		fop;
+  __uint64_t		rip;
+  __uint64_t		rdp;
+  __uint32_t		mxcsr;
+  __uint32_t		mxcr_mask;
+  __uint32_t		st_space[32];   /* 8*16 bytes for each FP-reg = 128 bytes */
+  __uint32_t		xmm_space[64];  /* 16*16 bytes for each XMM-reg = 256 bytes */
+  __uint32_t		padding[24];
 };
 
 struct user_regs_struct
 {
-  __extension__ unsigned long long int r15;
-  __extension__ unsigned long long int r14;
-  __extension__ unsigned long long int r13;
-  __extension__ unsigned long long int r12;
-  __extension__ unsigned long long int rbp;
-  __extension__ unsigned long long int rbx;
-  __extension__ unsigned long long int r11;
-  __extension__ unsigned long long int r10;
-  __extension__ unsigned long long int r9;
-  __extension__ unsigned long long int r8;
-  __extension__ unsigned long long int rax;
-  __extension__ unsigned long long int rcx;
-  __extension__ unsigned long long int rdx;
-  __extension__ unsigned long long int rsi;
-  __extension__ unsigned long long int rdi;
-  __extension__ unsigned long long int orig_rax;
-  __extension__ unsigned long long int rip;
-  __extension__ unsigned long long int cs;
-  __extension__ unsigned long long int eflags;
-  __extension__ unsigned long long int rsp;
-  __extension__ unsigned long long int ss;
-  __extension__ unsigned long long int fs_base;
-  __extension__ unsigned long long int gs_base;
-  __extension__ unsigned long long int ds;
-  __extension__ unsigned long long int es;
-  __extension__ unsigned long long int fs;
-  __extension__ unsigned long long int gs;
+  unsigned long r15;
+  unsigned long r14;
+  unsigned long r13;
+  unsigned long r12;
+  unsigned long rbp;
+  unsigned long rbx;
+  unsigned long r11;
+  unsigned long r10;
+  unsigned long r9;
+  unsigned long r8;
+  unsigned long rax;
+  unsigned long rcx;
+  unsigned long rdx;
+  unsigned long rsi;
+  unsigned long rdi;
+  unsigned long orig_rax;
+  unsigned long rip;
+  unsigned long cs;
+  unsigned long eflags;
+  unsigned long rsp;
+  unsigned long ss;
+  unsigned long fs_base;
+  unsigned long gs_base;
+  unsigned long ds;
+  unsigned long es;
+  unsigned long fs;
+  unsigned long gs;
 };
 
 struct user
@@ -77,26 +78,18 @@ struct user
   struct user_regs_struct	regs;
   int				u_fpvalid;
   struct user_fpregs_struct	i387;
-  __extension__ unsigned long long int	u_tsize;
-  __extension__ unsigned long long int	u_dsize;
-  __extension__ unsigned long long int	u_ssize;
-  __extension__ unsigned long long int	start_code;
-  __extension__ unsigned long long int	start_stack;
-  __extension__ long long int		signal;
+  unsigned long int		u_tsize;
+  unsigned long int		u_dsize;
+  unsigned long int		u_ssize;
+  unsigned long			start_code;
+  unsigned long			start_stack;
+  long int			signal;
   int				reserved;
-  __extension__ union
-    {
-      struct user_regs_struct*	u_ar0;
-      __extension__ unsigned long long int	__u_ar0_word;
-    };
-  __extension__ union
-    {
-      struct user_fpregs_struct*	u_fpstate;
-      __extension__ unsigned long long int	__u_fpstate_word;
-    };
-  __extension__ unsigned long long int	magic;
+  struct user_regs_struct*	u_ar0;
+  struct user_fpregs_struct*	u_fpstate;
+  unsigned long int		magic;
   char				u_comm [32];
-  __extension__ unsigned long long int	u_debugreg [8];
+  unsigned long int		u_debugreg [8];
 };
 
 #else
@@ -159,8 +152,8 @@ struct user
   unsigned long int		u_tsize;
   unsigned long int		u_dsize;
   unsigned long int		u_ssize;
-  unsigned long int		start_code;
-  unsigned long int		start_stack;
+  unsigned long			start_code;
+  unsigned long			start_stack;
   long int			signal;
   int				reserved;
   struct user_regs_struct*	u_ar0;
@@ -169,7 +162,7 @@ struct user
   char				u_comm [32];
   int				u_debugreg [8];
 };
-#endif  /* __x86_64__ */
+#endif  /* __WORDSIZE */
 
 #define PAGE_SHIFT		12
 #define PAGE_SIZE		(1UL << PAGE_SHIFT)

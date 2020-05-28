@@ -1,6 +1,5 @@
 /* @(#)netdb.h	2.1 88/07/29 3.9 RPCSRC */
 /*
- * Copyright (c) 2010, Oracle America, Inc.
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
@@ -11,7 +10,7 @@
  *       copyright notice, this list of conditions and the following
  *       disclaimer in the documentation and/or other materials
  *       provided with the distribution.
- *     * Neither the name of the "Oracle America, Inc." nor the names of its
+ *     * Neither the name of Sun Microsystems, Inc. nor the names of its
  *       contributors may be used to endorse or promote products derived
  *       from this software without specific prior written permission.
  *
@@ -28,6 +27,7 @@
  *   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  *   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+/*	@(#)rpc.h 1.8 87/07/24 SMI	*/
 
 /* Cleaned up for GNU C library roland@gnu.ai.mit.edu:
    added multiple inclusion protection and use of <sys/cdefs.h>.
@@ -52,12 +52,12 @@ struct rpcent
 
 extern void setrpcent (int __stayopen) __THROW;
 extern void endrpcent (void) __THROW;
-extern struct rpcent *getrpcbyname (const char *__name) __THROW;
+extern struct rpcent *getrpcbyname (__const char *__name) __THROW;
 extern struct rpcent *getrpcbynumber (int __number) __THROW;
 extern struct rpcent *getrpcent (void) __THROW;
 
 #ifdef __USE_MISC
-extern int getrpcbyname_r (const char *__name, struct rpcent *__result_buf,
+extern int getrpcbyname_r (__const char *__name, struct rpcent *__result_buf,
 			   char *__buffer, size_t __buflen,
 			   struct rpcent **__result) __THROW;
 

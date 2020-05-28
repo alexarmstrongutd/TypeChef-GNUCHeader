@@ -1,4 +1,4 @@
-/* Copyright (C) 2001-2014 Free Software Foundation, Inc.
+/* Copyright (C) 2001, 2002 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -12,23 +12,25 @@
    Lesser General Public License for more details.
 
    You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, see
-   <http://www.gnu.org/licenses/>.  */
+   License along with the GNU C Library; if not, write to the Free
+   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   02111-1307 USA.  */
 
 #ifndef _SYS_UCONTEXT_H
 #define _SYS_UCONTEXT_H	1
 
 #include <features.h>
 #include <signal.h>
+#include <bits/wordsize.h>
 
 /* We need the signal context definitions even if they are not used
    included in <signal.h>.  */
 #include <bits/sigcontext.h>
 
-#ifdef __x86_64__
+#if __WORDSIZE == 64
 
 /* Type for general register.  */
-__extension__ typedef long long int greg_t;
+typedef long int greg_t;
 
 /* Number of general registers.  */
 #define NGREG	23
@@ -126,7 +128,7 @@ typedef struct
     gregset_t gregs;
     /* Note that fpregs is a pointer.  */
     fpregset_t fpregs;
-    __extension__ unsigned long long __reserved1 [8];
+    unsigned long __reserved1 [8];
 } mcontext_t;
 
 /* Userlevel context.  */
@@ -140,7 +142,7 @@ typedef struct ucontext
     struct _libc_fpstate __fpregs_mem;
   } ucontext_t;
 
-#else /* !__x86_64__ */
+#else /* __WORDSIZE == 32 */
 
 /* Type for general register.  */
 typedef int greg_t;
@@ -241,6 +243,6 @@ typedef struct ucontext
     struct _libc_fpstate __fpregs_mem;
   } ucontext_t;
 
-#endif /* !__x86_64__ */
+#endif /* __WORDSIZE == 32 */
 
 #endif /* sys/ucontext.h */

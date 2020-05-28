@@ -42,7 +42,8 @@ namespace boost { namespace xpressive { namespace detail
 
     struct action_context;
 
-    struct ReplaceAlgo;
+    template<typename BidiIter>
+    struct replacement_context;
 
     ///////////////////////////////////////////////////////////////////////////////
     // placeholders
@@ -211,11 +212,11 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Traits>
     struct logical_newline_matcher;
 
-    typedef proto::expr<proto::tag::terminal, proto::term<logical_newline_placeholder>, 0> logical_newline_xpression;
+    typedef proto::terminal<logical_newline_placeholder>::type logical_newline_xpression;
 
     struct set_initializer;
 
-    typedef proto::expr<proto::tag::terminal, proto::term<set_initializer>, 0> set_initializer_type;
+    typedef proto::terminal<set_initializer>::type set_initializer_type;
 
     struct lookahead_tag;
 
@@ -285,9 +286,6 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename BidiIter>
     struct sub_match_impl;
-
-    template<typename T>
-    struct list;
 
     template<typename BidiIter>
     struct results_cache;

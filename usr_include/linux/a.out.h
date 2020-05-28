@@ -154,7 +154,7 @@ enum machine_type {
 #if !defined (N_BSSADDR)
 #define N_BSSADDR(x) (N_DATADDR(x) + (x).a_data)
 #endif
-
+
 #if !defined (N_NLIST_DECLARED)
 struct nlist {
   union {
@@ -227,7 +227,7 @@ struct nlist {
 
 /* This is output from LD.  */
 #define N_SETV	0x1C		/* Pointer to set vector in data area.  */
-
+
 #if !defined (N_RELOCATION_INFO_DECLARED)
 /* This structure describes a single relocation to be performed.
    The text-relocation section of the file is a vector of these structures,

@@ -102,8 +102,7 @@ class StoragePolicy
 #include <functional>
 #include <limits>
 #include <stdexcept>
-#include <ios>
-
+#include <iosfwd>
 #include <cstddef>
 #include <cstring>
 #include <cstdlib>
@@ -139,13 +138,13 @@ namespace flex_string_details
         case 0:
             while (b != e)
             {
-                *b = c; ++b; BOOST_FALLTHROUGH;
-        case 7: *b = c; ++b; BOOST_FALLTHROUGH;
-        case 6: *b = c; ++b; BOOST_FALLTHROUGH;
-        case 5: *b = c; ++b; BOOST_FALLTHROUGH;
-        case 4: *b = c; ++b; BOOST_FALLTHROUGH;
-        case 3: *b = c; ++b; BOOST_FALLTHROUGH;
-        case 2: *b = c; ++b; BOOST_FALLTHROUGH;
+                *b = c; ++b;
+        case 7: *b = c; ++b;
+        case 6: *b = c; ++b;
+        case 5: *b = c; ++b;
+        case 4: *b = c; ++b;
+        case 3: *b = c; ++b;
+        case 2: *b = c; ++b;
         case 1: *b = c; ++b;
             }
         }
@@ -1819,7 +1818,7 @@ private:
 #ifndef NDEBUG
         Invariant checker(*this); 
 #endif
-        BOOST_ASSERT(begin() <= p && p <= end());
+        assert(begin() <= p && p <= end());
         const size_type insertOffset(p - begin());
         const size_type originalSize(size());
         if(n < originalSize - insertOffset)
@@ -1885,16 +1884,16 @@ private:
         const typename std::iterator_traits<FwdIterator>::difference_type n2 = 
             std::distance(s1, s2);
 
-        BOOST_ASSERT(n2 >= 0);
+        assert(n2 >= 0);
         using namespace flex_string_details;
-        BOOST_ASSERT(pos <= size());
+        assert(pos <= size());
 
         const typename std::iterator_traits<FwdIterator>::difference_type maxn2 = 
             capacity() - size();
         if (maxn2 < n2)
         {
             // Reallocate the string.
-            BOOST_ASSERT(!IsAliasedRange(s1, s2));
+            assert(!IsAliasedRange(s1, s2));
             reserve(size() + n2);
             i = begin() + pos;
         }
@@ -1911,7 +1910,7 @@ private:
             FwdIterator t = s1;
             const size_type old_size = size();
             std::advance(t, old_size - pos);
-            BOOST_ASSERT(std::distance(t, s2) >= 0);
+            assert(std::distance(t, s2) >= 0);
             Storage::append(t, s2);
             Storage::append(data() + pos, data() + old_size);
             std::copy(s1, t, i);
@@ -2012,9 +2011,9 @@ private:
     flex_string& ReplaceImplDiscr(iterator i1, iterator i2, 
         const value_type* s, size_type n, Selector<2>)
     { 
-        BOOST_ASSERT(i1 <= i2);
-        BOOST_ASSERT(begin() <= i1 && i1 <= end());
-        BOOST_ASSERT(begin() <= i2 && i2 <= end());
+        assert(i1 <= i2);
+        assert(begin() <= i1 && i1 <= end());
+        assert(begin() <= i2 && i2 <= end());
         return replace(i1, i2, s, s + n); 
     }
     
@@ -2053,10 +2052,10 @@ private:
 #endif
         const typename std::iterator_traits<iterator>::difference_type n1 = 
             i2 - i1;
-        BOOST_ASSERT(n1 >= 0);
+        assert(n1 >= 0);
         const typename std::iterator_traits<FwdIterator>::difference_type n2 = 
         std::distance(s1, s2);
-        BOOST_ASSERT(n2 >= 0);
+        assert(n2 >= 0);
 
         if (IsAliasedRange(s1, s2))
         {
@@ -2536,10 +2535,10 @@ operator<<(
 // Graphics makes no representations about the suitability of this software for 
 // any purpose. It is provided "as is" without express or implied warranty.
 // 
-// Copyright (c) 1997-1999
+// Copyright © 1997-1999
 // Silicon Graphics Computer Systems, Inc.
 // 
-// Copyright (c) 1994
+// Copyright © 1994
 // Hewlett-Packard Company 
 
 template <typename E, class T, class A, class S>

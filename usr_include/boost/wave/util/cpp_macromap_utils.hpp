@@ -5,7 +5,7 @@
 
     http://www.boost.org/
 
-    Copyright (c) 2001-2012 Hartmut Kaiser. Distributed under the Boost
+    Copyright (c) 2001-2009 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -285,8 +285,7 @@ trim_replacement_list (ContainerT &replacement_list)
     typename ContainerT::iterator it = replacement_list.begin();
 
         while (it != end && IS_CATEGORY(*it, WhiteSpaceTokenType)) { 
-            token_id id(*it);
-            if (T_PLACEHOLDER != id && T_PLACEMARKER != id) {
+            if (T_PLACEHOLDER != token_id(*it)) {
                 typename ContainerT::iterator next = it;
                 ++next;
                 replacement_list.erase(it);
@@ -310,8 +309,7 @@ trim_replacement_list (ContainerT &replacement_list)
     typename ContainerT::iterator it = rit.base();
 
         while (it != end && IS_CATEGORY(*it, WhiteSpaceTokenType)) { 
-            token_id id(*it);
-            if (T_PLACEHOLDER != id && T_PLACEMARKER != id) {
+            if (T_PLACEHOLDER != token_id(*it)) {
                 typename ContainerT::iterator next = it;
                 ++next;
                 replacement_list.erase(it);
@@ -322,25 +320,6 @@ trim_replacement_list (ContainerT &replacement_list)
             }
         }
     }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Tests, whether the given token sequence consists out of whitespace only
-//
-///////////////////////////////////////////////////////////////////////////////
-template <typename ContainerT>
-inline bool
-is_whitespace_only (ContainerT const &argument)
-{
-    typename ContainerT::const_iterator end = argument.end();
-    for (typename ContainerT::const_iterator it = argument.begin();
-          it != end; ++it)
-    {
-        if (!IS_CATEGORY(*it, WhiteSpaceTokenType))
-            return false;
-    }
-    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -360,8 +339,7 @@ remove_placeholders (ContainerT &replacement_list)
     typename ContainerT::iterator it = replacement_list.begin();
 
         while (it != end) {
-            token_id id(*it);
-            if (T_PLACEHOLDER == id || T_PLACEMARKER == id) {
+            if (T_PLACEHOLDER == token_id(*it)) {
                 typename ContainerT::iterator next = it;
                 ++next;
                 replacement_list.erase(it);
@@ -373,8 +351,7 @@ remove_placeholders (ContainerT &replacement_list)
         }
 
     // remove all 'new' leading and trailing whitespace 
-        if (is_whitespace_only(replacement_list))
-            trim_replacement_list(replacement_list);
+        trim_replacement_list(replacement_list);
     }
 }
 
@@ -431,16 +408,22 @@ trim_sequence (ContainerT &argument)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// call 'skipped_token' preprocessing hook
-template <typename ContextT>
-void call_skipped_token_hook(ContextT& ctx, 
-    typename ContextT::token_type const& skipped)
+//
+//  Tests, whether the given token sequence consists out of whitespace only
+//
+///////////////////////////////////////////////////////////////////////////////
+template <typename ContainerT>
+inline bool
+is_whitespace_only (ContainerT const &argument)
 {
-#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
-    ctx.get_hooks().skipped_token(skipped);     
-#else
-    ctx.get_hooks().skipped_token(ctx.derived(), skipped);
-#endif
+    typename ContainerT::const_iterator end = argument.end();
+    for (typename ContainerT::const_iterator it = argument.begin();
+          it != end; ++it)
+    {
+        if (!IS_CATEGORY(*it, WhiteSpaceTokenType))
+            return false;
+    }
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -448,16 +431,14 @@ void call_skipped_token_hook(ContextT& ctx,
 //  Skip forward to a given token
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename ContextT, typename IteratorT>
+template <typename IteratorT>
 inline bool 
-skip_to_token(ContextT& ctx, IteratorT &it, IteratorT const &end, 
-    token_id id, bool& seen_newline)
+skip_to_token(IteratorT &it, IteratorT const &end, token_id id, 
+    bool& seen_newline)
 {
     using namespace boost::wave;
     if (token_id(*it) == id) 
         return true;
-
-//     call_skipped_token_hook(ctx, *it);
     if (++it == end) 
         return false;
 
@@ -466,8 +447,6 @@ skip_to_token(ContextT& ctx, IteratorT &it, IteratorT const &end,
     {
         if (T_NEWLINE == token_id(*it))
             seen_newline = true;
-
-//         call_skipped_token_hook(ctx, *it);
         if (++it == end)
             return false;
     }

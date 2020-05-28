@@ -24,8 +24,6 @@ template<typename CharT>
 class basic_state_machine
 {
 public:
-    typedef CharT char_type;
-
     class iterator
     {
     public:

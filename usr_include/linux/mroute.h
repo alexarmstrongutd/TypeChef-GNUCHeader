@@ -24,11 +24,7 @@
 #define MRT_DEL_MFC	(MRT_BASE+5)	/* Delete a multicast forwarding entry	*/
 #define MRT_VERSION	(MRT_BASE+6)	/* Get the kernel multicast version	*/
 #define MRT_ASSERT	(MRT_BASE+7)	/* Activate PIM assert mode		*/
-#define MRT_PIM		(MRT_BASE+8)	/* enable PIM code			*/
-#define MRT_TABLE	(MRT_BASE+9)	/* Specify mroute table ID		*/
-#define MRT_ADD_MFC_PROXY	(MRT_BASE+10)	/* Add a (*,*|G) mfc entry	*/
-#define MRT_DEL_MFC_PROXY	(MRT_BASE+11)	/* Del a (*,*|G) mfc entry	*/
-#define MRT_MAX		(MRT_BASE+11)
+#define MRT_PIM		(MRT_BASE+8)	/* enable PIM code	*/
 
 #define SIOCGETVIFCNT	SIOCPROTOPRIVATE	/* IP protocol privates */
 #define SIOCGETSGCNT	(SIOCPROTOPRIVATE+1)
@@ -143,4 +139,4 @@ struct igmpmsg {
 #define IGMPMSG_WHOLEPKT	3		/* For PIM Register processing */
 
 
-#endif /* __LINUX_MROUTE_H */
+#endif

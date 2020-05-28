@@ -1,4 +1,4 @@
-/* Copyright (C) 2001-2014 Free Software Foundation, Inc.
+/* Copyright (C) 2001, 2004 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -12,8 +12,9 @@
    Lesser General Public License for more details.
 
    You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, see
-   <http://www.gnu.org/licenses/>.  */
+   License along with the GNU C Library; if not, write to the Free
+   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   02111-1307 USA.  */
 
 #ifndef _SYS_PROCFS_H
 #define _SYS_PROCFS_H	1
@@ -35,11 +36,7 @@
 __BEGIN_DECLS
 
 /* Type for a general-purpose register.  */
-#ifdef __x86_64__
-__extension__ typedef unsigned long long elf_greg_t;
-#else
 typedef unsigned long elf_greg_t;
-#endif
 
 /* And the whole bunch of them.  We could have used `struct
    user_regs_struct' directly in the typedef, but tradition says that
@@ -48,7 +45,7 @@ typedef unsigned long elf_greg_t;
 #define ELF_NGREG (sizeof (struct user_regs_struct) / sizeof(elf_greg_t))
 typedef elf_greg_t elf_gregset_t[ELF_NGREG];
 
-#ifndef __x86_64__
+#if __WORDSIZE == 32
 /* Register set for the floating-point registers.  */
 typedef struct user_fpregs_struct elf_fpregset_t;
 

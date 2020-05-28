@@ -162,7 +162,7 @@ template<class Graph,
 void r_c_shortest_paths_dispatch
 ( const Graph& g, 
   const VertexIndexMap& vertex_index_map, 
-  const EdgeIndexMap& /*edge_index_map*/, 
+  const EdgeIndexMap& edge_index_map, 
   typename graph_traits<Graph>::vertex_descriptor s, 
   typename graph_traits<Graph>::vertex_descriptor t, 
   // each inner vector corresponds to a pareto-optimal path
@@ -179,7 +179,7 @@ void r_c_shortest_paths_dispatch
   Resource_Extension_Function& ref, 
   Dominance_Function& dominance, 
   // to specify the memory management strategy for the labels
-  Label_Allocator /*la*/, 
+  Label_Allocator la, 
   Visitor vis )
 {
   pareto_optimal_resource_containers.clear();
@@ -222,7 +222,7 @@ void r_c_shortest_paths_dispatch
   std::vector<int> vec_last_valid_index_for_dominance( num_vertices( g ), 0 );
   std::vector<bool> 
     b_vec_vertex_already_checked_for_dominance( num_vertices( g ), false );
-  while( !unprocessed_labels.empty()  && vis.on_enter_loop(unprocessed_labels, g) )
+  while( unprocessed_labels.size() )
   {
     Splabel cur_label = unprocessed_labels.top();
     unprocessed_labels.pop();
@@ -359,7 +359,7 @@ void r_c_shortest_paths_dispatch
       typename graph_traits<Graph>::vertex_descriptor cur_vertex = 
         cur_label->resident_vertex;
       typename graph_traits<Graph>::out_edge_iterator oei, oei_end;
-      for( boost::tie( oei, oei_end ) = out_edges( cur_vertex, g ); 
+      for( tie( oei, oei_end ) = out_edges( cur_vertex, g ); 
            oei != oei_end; 
            ++oei )
       {
@@ -409,7 +409,7 @@ void r_c_shortest_paths_dispatch
   typename std::list<Splabel>::const_iterator csi = dsplabels.begin();
   typename std::list<Splabel>::const_iterator csi_end = dsplabels.end();
   // if d could be reached from o
-  if( !dsplabels.empty() )
+  if( dsplabels.size() )
   {
     for( ; csi != csi_end; ++csi )
     {
@@ -449,17 +449,15 @@ void r_c_shortest_paths_dispatch
 struct default_r_c_shortest_paths_visitor
 {
   template<class Label, class Graph>
-  void on_label_popped( const Label&, const Graph& ) {}
+  void on_label_popped( const Label& l, const Graph& g ) {}
   template<class Label, class Graph>
-  void on_label_feasible( const Label&, const Graph& ) {}
+  void on_label_feasible( const Label& l, const Graph& g ) {}
   template<class Label, class Graph>
-  void on_label_not_feasible( const Label&, const Graph& ) {}
+  void on_label_not_feasible( const Label& l, const Graph& g ) {}
   template<class Label, class Graph>
-  void on_label_dominated( const Label&, const Graph& ) {}
+  void on_label_dominated( const Label& l, const Graph& g ) {}
   template<class Label, class Graph>
-  void on_label_not_dominated( const Label&, const Graph& ) {}
-  template<class Queue, class Graph>             
-  bool on_enter_loop(const Queue& queue, const Graph& graph) {return true;}
+  void on_label_not_dominated( const Label& l, const Graph& g ) {}
 }; // default_r_c_shortest_paths_visitor
 
 
@@ -561,10 +559,8 @@ void r_c_shortest_paths
                                dominance, 
                                la, 
                                vis );
-  if (!pareto_optimal_solutions.empty()) {
-    pareto_optimal_solution = pareto_optimal_solutions[0];
-    pareto_optimal_resource_container = pareto_optimal_resource_containers[0];
-  }
+  pareto_optimal_solution = pareto_optimal_solutions[0];
+  pareto_optimal_resource_container = pareto_optimal_resource_containers[0];
 }
 
 // third overload:
@@ -648,10 +644,8 @@ void r_c_shortest_paths
                                dominance, 
                                default_r_c_shortest_paths_allocator(), 
                                default_r_c_shortest_paths_visitor() );
-  if (!pareto_optimal_solutions.empty()) {
-    pareto_optimal_solution = pareto_optimal_solutions[0];
-    pareto_optimal_resource_container = pareto_optimal_resource_containers[0];
-  }
+  pareto_optimal_solution = pareto_optimal_solutions[0];
+  pareto_optimal_resource_container = pareto_optimal_resource_containers[0];
 }
 // r_c_shortest_paths
 

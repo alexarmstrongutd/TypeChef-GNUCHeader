@@ -1,4 +1,5 @@
-/* Copyright (C) 1996-2014 Free Software Foundation, Inc.
+/* Copyright (C) 1996, 1997, 1998, 1999, 2004, 2008
+   Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Ulrich Drepper <drepper@cygnus.com>, 1996.
 
@@ -13,8 +14,9 @@
    Lesser General Public License for more details.
 
    You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, see
-   <http://www.gnu.org/licenses/>.  */
+   License along with the GNU C Library; if not, write to the Free
+   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   02111-1307 USA.  */
 
 #ifndef _REGEXP_H
 #define _REGEXP_H	1
@@ -99,7 +101,7 @@ extern char *locs;
    on the macros.  */
 char *
 compile (char *__restrict instring, char *__restrict expbuf,
-	 const char *__restrict endbuf, int eof)
+	 __const char *__restrict endbuf, int eof)
 {
   char *__input_buffer = NULL;
   size_t __input_size = 0;
@@ -211,14 +213,14 @@ compile (char *__restrict instring, char *__restrict expbuf,
    found in the buffer starting at EXPBUF.  `loc1' will return the
    first character matched and `loc2' points to the next unmatched
    character.  */
-extern int step (const char *__restrict __string,
-		 const char *__restrict __expbuf) __THROW;
+extern int step (__const char *__restrict __string,
+		 __const char *__restrict __expbuf) __THROW;
 
 /* Match the beginning of STRING with the compiled regular expression
    in EXPBUF.  If the match is successful `loc2' will contain the
    position of the first unmatched character.  */
-extern int advance (const char *__restrict __string,
-		    const char *__restrict __expbuf) __THROW;
+extern int advance (__const char *__restrict __string,
+		    __const char *__restrict __expbuf) __THROW;
 
 
 __END_DECLS
