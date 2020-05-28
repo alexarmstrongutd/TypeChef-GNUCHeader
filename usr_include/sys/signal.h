@@ -1,1 +1,1 @@
-../x86_64-linux-gnu/sys/signal.h
+#include <signal.h>
